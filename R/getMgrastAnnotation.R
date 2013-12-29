@@ -1,0 +1,30 @@
+getMgrastAnnotation <- function(MetagenomeID, resource = c(source = "KO", type = "ontology"), 
+    webkey = NULL) {
+    server.resource <- "http://api.metagenomics.anl.gov/1/annotation/similarity"
+    server.para <- paste(paste0(c("?", "&"), paste(c("source", "type"), resource, 
+        sep = "=")), collapse = "")
+    url.str <- paste0(server.resource, "/", MetagenomeID, server.para)
+    message("Loading the annotations form MG-RAST...", domain = NA)
+    message("Time this step took is propotional to the size of metagenomes and your network, \nplease wait...")
+    anno <- getURL(url.str)
+    private.index <- which(grepl("insufficient\\s+permissions", anno))
+    if (length(private.index)) {
+        if (is.null(webkey)) {
+            stop("please input the webkey")
+        } else {
+            private.url <- paste0(url.str[private.index], "&auth=", webkey)
+            anno[private.index] <- getURL(private.url)
+        }
+    }
+    invalid.index <- which(grepl("does\\s+not\\s+exists", anno))
+    invalid.source <- which(grepl("Invalid\\s+ontology\\s+source", anno))
+    if (length(invalid.source)) 
+        stop("invalid ontology source")
+    if (length(invalid.index)) 
+        stop(paste("The", paste(invalid.index, collapse = ","), "metagenomeID does not exists"))
+    if (length(which(grepl("insufficient\\s+permissions", anno)))) 
+        stop("invalid webkey")
+    anno <- lapply(as.list(anno), function(x) read.delim(textConnection(x), header = FALSE, 
+        sep = "\t", stringsAsFactor = F))
+    return(anno)
+} 

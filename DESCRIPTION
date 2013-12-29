@@ -1,17 +1,20 @@
 Package: mmnet
-Title: Metagenomic analysis of microbiome metabolic network
-Version: 0.99.2
-Date: 2013-11-16
+Type: Package
+Title: What the package does (short line)
+Version: 0.99.3
+Date: 2013-11-10
 Author: Yang Cao, Fei Li
 Maintainer: Yang Cao <yiluheihei@gmail.com>, Fei Li
         <pittacus@gmail.com>
-Description: This package gives the implementations microbiome metabolic network constructing and analyzing.
-             It introduces a unique metagenomic systems biology approach,  mapping metagenomic data to the
-             KEGG global metabolic pathway and constructing a systems-level network. The system-level network
-             and the next topological analysis will be of great help to analysis the various functional
+Description: This package gives the implementations microbiome metabolic network constructing and analyzing. 
+             It introduces a unique metagenomic systems biology approach,  mapping metagenomic data to the 
+             KEGG global metabolic pathway and constructing a systems-level network. The system-level network 
+             and the next topological analysis will be of great help to analysis the various functional 
              properties, including regulation and metabolic functionality of the metagenome.
-Depends: R (>= 2.10), Biobase, igraph, KEGGREST
+Depends:  R (>= 2.14), igraph
+Imports: Biobase, RJSONIO, stringr, reshape2, ggplot2, KEGGREST, plyr, XML, RCurl, modeltools (>= 0.2-21)
+Suggests: RCytoscape, graph
 License: GPL (>= 2)
 LazyLoad: yes
-biocViews: Bioinformatics, GraphsAndNetworks, HighThroughputSequencing,
-        Pathways
+biocViews: Bioinformatics, GraphsAndNetworks, HighThroughputSequencing, Pathways
+

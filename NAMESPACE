@@ -1,1 +1,28 @@
-export(getKEGGPathwayInfo, parseMGRASTAnno, mapAnnotoKEGGPathway, constructMetabolicNetwork)
+import(igraph)
+
+export(analyzeSSN, checkMgrastProject, compareKOState, constructMetabolicNetwork,
+  constructSSN, delMgrastInbox, estimateKOAbundance, generateMgrastWebkey,
+  generateMgrastWebsession, getKOPathwayInfo, getMgrastAnnotation,
+  listMgrastInbox, loadMetabolicData, loginMgrast, neighborhoodConDst,
+  neighborhoodConnectivity, preprocessKOMetabolites, runMgrastAnnotation,
+  saveMetabolicData, submitMgrastJob, topologicalCoff,
+  updateKEGGPathway, uploadMgrast, stripSSN, showSSN)
+
+importFrom(Biobase, isUnique, listLen)
+importFrom(stringr, "str_sub<-", str_sub, str_extract_all)
+importFrom(plyr, laply)
+importFrom(ggplot2, ggplot, aes, aes_string, geom_point, stat_smooth, facet_wrap, scale_x_log10)
+importFrom(reshape2, melt)
+importFrom(RJSONIO, fromJSON)
+importFrom(KEGGREST, keggList, keggGet)
+importFrom(RCurl, getURL, postForm, getForm, getCurlHandle, getCurlInfo, fileUpload, 
+  curlGlobalInit)
+importFrom(XML, htmlParse, xmlDoc, xpathApply, getNodeSet, toString.XMLNode, xmlRoot, xmlSApply,   
+  xmlAttrs, xmlChildren, xmlValue, xmlTreeParse)
+
+importFrom(modeltools, KLdiv)
+
+ 
+
+
+
