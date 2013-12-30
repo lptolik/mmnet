@@ -7,14 +7,11 @@ Metabolic network construction of a specific sample
 Once KO is estimated for a sample, a specific metabolic network can be constructed by calling this function.
 }
 \usage{
-constructSSN(KOAbund, RefDbcache)
+constructSSN(KOAbund)
 }
 \arguments{
   \item{KOAbund}{
 a vector, can be obationed by function \emph{estimateKOAbund}
-}
-\item{RefDbcache}{
-reference data
 }
 }
 \details{

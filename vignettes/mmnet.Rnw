@@ -194,8 +194,8 @@ Appanrently, KO abundance across all samples was highly concordant (R>0.77)
 Different microbiomes with various states (obese or lean) have different KO abundances. We provides function \textit{stripSSN} to strip the reference netwok to obtain the state specific metabolic network for each microbiome. The KO abundance was add to the network as a nodes attributes.
 
 <<strip-network,echo=TRUE>>==
-  SSN <- lapply(KOAbund, function(x)stripSSN(RefDbcache$network, x))
-  g <- SSN[[3]]
+  ssn <- lapply(KOAbund, constructSSN)
+  g <- ssn[[3]]
   summary(g)
   abund <- get.vertex.attribute(g,"abundance",index=V(g))
   summary(abund)
