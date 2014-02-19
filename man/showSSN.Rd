@@ -17,7 +17,7 @@ the graph to visualization, reference metabolic network or sub-network of differ
 a string, represents the property of your network, for more description in detalils
 }
 \item{method}{
-method used to mesure the difference abundance, more description in \code{\link{compareKOState}}
+method used to mesure the difference abundance, more description in \code{\link{compareSSN}}
 }
  \item{cutoff}{
 numeric vector with length 2, specifies the difference thereshold, more description in details
@@ -29,7 +29,7 @@ additional plotting parameters. See \code{\link{igraph.plotting}} for the comple
 \details{
 There are three different metabolic networks: ref - reference global network, strip - state specific, compared - compared network between different state network. 
 
-More details on  method to measure the difference abundance see \code{\link{compareKOState}}
+More details on  method to measure the difference abundance see \code{\link{compareSSN}}
 
 cutoff: two-fold threshold commonly used in the odds-ratio test, cutoff = c(0.5, 2); enzymes with the 10\% highest calculated differences and the 10\% lowest differences, cutoff = c(0.1, 0.9)
 }

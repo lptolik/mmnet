@@ -5,7 +5,7 @@ getMgrastAnnotation <- function(MetagenomeID, resource = c(source = "KO", type =
         sep = "=")), collapse = "")
     url.str <- paste0(server.resource, "/", MetagenomeID, server.para)
     message("Loading the annotations form MG-RAST...", domain = NA)
-    message("Time this step took is propotional to the size of metagenomes and your network, \nplease wait...")
+    message("The time spent in this step is proportional to the total amount of remote data...")
     anno <- getURL(url.str)
     private.index <- which(grepl("insufficient\\s+permissions", anno))
     if (length(private.index)) {
@@ -24,7 +24,8 @@ getMgrastAnnotation <- function(MetagenomeID, resource = c(source = "KO", type =
         stop(paste("The", paste(invalid.index, collapse = ","), "metagenomeID does not exists"))
     if (length(which(grepl("insufficient\\s+permissions", anno)))) 
         stop("invalid webkey")
-    anno <- lapply(as.list(anno), function(x) read.delim(textConnection(x), header = FALSE, 
-        sep = "\t", stringsAsFactor = F))
+    # anno <- lapply(as.list(anno), function(x) read.delim(textConnection(x), header = FALSE, 
+    #     sep = "\t", stringsAsFactor = F))
+    anno <- read.delim(textConnection(anno), header = FALSE, sep = "\t", stringsAsFactor = F)
     return(anno)
 } 

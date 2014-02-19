@@ -1,4 +1,4 @@
-estimateKOAbundance <- function(KOAnno) {
+estimateAbundance <- function(KOAnno) {
     if (ncol(KOAnno) != 13) 
         stop("annotation file is invalid")
     if (grepl("query", KOAnno[1, 1])) {

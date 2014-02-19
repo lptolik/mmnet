@@ -29,11 +29,13 @@ This manual is a brief introduction to structure, functions and uasge of \emph{m
 This package addresses the microbiome metabolic network construction and analysis. Below we lists the main features of \emph{mmnet}: 
 
   \begin{itemize}
-    \item Reference network construction and updating
-    \item Functional annotation of microbiome with the Metagenomics RAST sever and annotation data loading
-    \item Parsing annotaion data to obtain the KO information and constructing State Specific Network (SSN)
-    \item SSN topological ananlysis and comparison
-    \item Reference metabolic network, SSN and compared network visualization 
+    \item Building a local KEGG orthology dataset 
+    \item Constructing the reference metabolic network
+    \item Annotation of metagenomic sequence reads with Metagenomics RAST sever 
+    \item Estimating the abundance of enzymatic genes
+    \item Constructing State Specific Network (SSN)
+    \item SSN topological ananlysis 
+    \item Abundance comparison of enzymatic genes
   \end{itemize}
 
 \subsection{Installation}
@@ -62,22 +64,22 @@ Thanks for using this package. Please contact us if there are any bugs or suggus
 
 \section{A use case: from raw sequence data to metabolic network analysis}
 
-We will demonstrate some of the functions in \emph{mmnet}. A public dataset which have been annotated in MG-RAST was taken for demenstration purposes since the time Sequnce annotation taken on MG-RAST will range between a few hours and weeks. There is only a  simple code example for microbiome functional annotation.
+We will demonstrate some of the functions in \emph{mmnet}. A public dataset which have been annotated in MG-RAST was taken for demenstration purposes since the time metagenomic sequence taken on MG-RAST will range between a few hours and weeks. There is only a  simple code example for microbiome functional annotation.
 
 The test data is consisting of several microbiomes from twin pairs and their mothers and available in MG-RAST. 
 
-\subsection{Reference metabolic network}
+\subsection{Local KEGG orthology dataset and reference metabolic network constructing}
 
-This package takes KEGG database to annotate KOs with metabolic reactions which is the basis representation for all proteins and functional RNAs corresponding to KEGG pathway nodes, BRITE hiearchy nodes, and KEGG module nodes to annotation the microbiome.  The KEGG metabolic pathway is the best organized part of KEGG PATHWAY database, and also is a network of KO-KO  relations \citep{kanehisa2000kegg}. It is composed of KO, substrate and product of KO, and have been applied widely to create genome-scale metabolic networks of various microbial species \citep{oberhardt2009applications}. 
+This package takes KEGG database to annotate enzymatic genes with metabolic reactions which is the basis representation for all proteins and functional RNAs corresponding to KEGG pathway nodes, BRITE hiearchy nodes, and KEGG module nodes to annotation the microbiome.  The KEGG metabolic pathway is the best organized part of KEGG PATHWAY database, and also is a network of KO-KO  relations \citep{kanehisa2000kegg}. It is composed of KO, substrate and product of KO, and have been applied widely to create genome-scale metabolic networks of various microbial species \citep{oberhardt2009applications}. 
 
-An initial reference data named \textit{RefDbcache.rda} was saved in "data" subdirectory of \emph{mment}, that contains KOs and anntated with a metabolic reaction. Morever, an KO based reference metabolic network was also saved in \textit{RefDbcache.rda}, where nodes represent KOs and a directed edge from KO1 to KO2 indicates that a product metabolite of a reaction catalyzed by a KO is a substrate metabolite of a reaction catalyzed by another KO. Howerver, KEGG database updated frequently, reference data can be updated by function \textit{updateMetabolicNetwork} manually and saved in the directory user specified. 
+An initial reference data named \textit{RefDbcache.rda} was saved in "data" subdirectory of \emph{mment}, that contains KOs and anntated with a metabolic reaction. Morever, an KO based reference metabolic network was also saved in \textit{RefDbcache.rda}, where nodes represent enzymes (KOs), and the directed edge from enzyme A to enzyme B indicates that a product metabolite of a reaction catalyzed by enzyme A is a substrate metabolite of a reaction catalyzed by enzyme B. Howerver, KEGG database updated frequently, reference data can be updated by function \textit{updateMetabolicNetwork} manually and saved in the directory user specified. 
 
 <<initial-data,echo=TRUE>>=
 ## the initial saved reference data
    data(RefDbcache)
 ##
    names(RefDbcache)
-## KO information, metabolites of annotated reation is 
+## enzymatic genes (KOs) information, metabolites of annotated reation is 
 ## saved as substrate and product 
    head(RefDbcache$ko)
 ## the reference network
@@ -97,7 +99,7 @@ Each KO is assigned a set of substrate and product metabolites according to the 
 # refNet <- constuctMetabolicNetkwrok(RefDbcache) 
 @
 
-\subsection{Microbiome functional annotation}
+\subsection{Annotation of metagenomic sequence reads}
 
 Functional annotation of microbiome is a crucial step for subsequent analysis. \emph{mmnet} provides functions from user login to sequence annotation linking \emph{R} with MG-RAST (Metagenomics RAST) server \citep{glass2010using}. MG-RAST is an automated analysis platform for metagenomes providing a new paradigm for the annotation and analysis of metagenomes based on sequence data, and is also stable, extensible, and freely available to all researchers. Before annatated microbiome, your should register an account in MG-RAST. Fore more details see \url{http://metagenomics.anl.gov}. 
 
@@ -137,7 +139,7 @@ To check your MG-RAST job status, we have to call \textit{loginMgrast} to login 
 # webkey)
 @
 
-\subsection{Parsing Annotated metagenomic data}
+\subsection{Estimating the abundance of enzymatic genes}
 
 As mentioned above, a public dataset \citep{turnbaugh2008core} was taken for example data, four samples of mpg10 (metagenome project 10) in MGRAST. Apparently, user could obtain the annatated information with function \textit{getMgrastAnnotation}. For saving claculating time, we have saved it as \textit{mpg10Anno.rda} in \emph{mmnet}. It can be loaded by typing or pasting the following:
 
@@ -148,10 +150,10 @@ As mentioned above, a public dataset \citep{turnbaugh2008core} was taken for exa
   summary(mgp10Anno)
 @
 
-To estimate the KO abundance, \textit{estimateKOAbundance} function should be called for each sample.
+To estimate the abundance of enzymatic genes, \textit{estimateAbundance} function should be called for each sample.
 
 <<estimate,echo=TRUE>>==
- KOAbund <- lapply(mgp10Anno,estimateKOAbundance)
+ KOAbund <- lapply(mgp10Anno,estimateAbundance)
  summary(KOAbund)
  lapply(KOAbund,head,7)
 @
@@ -174,7 +176,7 @@ For comparative analysis among samples with different state (e.g. obese or lean,
 @
 Appanrently, KO abundance across all samples was highly concordant (R>0.77)
 
-\subsection{State specific metabolic network constructing and analysis}
+\subsection{Constructing State Specific Network}
 
 % The \emph{mmnet} provides function \emph{mapAnnotoKEGGPathway} for mapping the KOs  on KEGG global metabolic pathway. This function returns an url of colored map, users may automated open the url by optional "browse" or manually open it.
 
@@ -191,7 +193,7 @@ Appanrently, KO abundance across all samples was highly concordant (R>0.77)
 
 % The colored KEGG global metabolic map with example metagenomic data.
 
-Different microbiomes with various states (obese or lean) have different KO abundances. We provides function \textit{stripSSN} to strip the reference netwok to obtain the state specific metabolic network for each microbiome. The KO abundance was add to the network as a nodes attributes.
+Different microbiomes with various states (obese or lean) have different KO abundances. We provides function \textit{constructSSN} to strip the reference netwok to obtain the state specific metabolic network for each microbiome. The KO abundance was add to the network as a nodes attributes automatically.
 
 <<strip-network,echo=TRUE>>==
   ssn <- lapply(KOAbund, constructSSN)
@@ -201,13 +203,14 @@ Different microbiomes with various states (obese or lean) have different KO abun
   summary(abund)
 @
 
+\subsection{Topogolical analysis of SSN and abundance comparison of enzymatic genes}
+
  Function \textit{analyzeSSN} links the difference KO abundance with the topological features of state specific metabolic network to find the topological differences among SSNs. Five most presented vertex topological feartures is provided by this function, added to the newtwork as nodes attributes, it also can plot the SSN. See \texttt{'?analyzeSSN'} for details. 
 
 \begin{figure}[!htbp]
   \begin{center}
 <<analyzeSSN, echo=TRUE, fig=TRUE>>==
- topo.feature <- analyzeSSN(g, Scatterplot=TRUE, .properties=list("betweenness", 
-                  "degree", "neighborhoodCon", "topoparam"))
+ topo.feature <- analyzeSSN(g)
 
  ## network with topological features as attributes
  topo.feature
@@ -225,17 +228,26 @@ Different microbiomes with various states (obese or lean) have different KO abun
 %   \end{center}
 % \end{figure}
 
-To compare the abundance of KOs across various samples, we take two strategies odds ratio and difference rank of each KO to identify the abnormal KO (enrich or deplete). It will construct a compararive network, which nodes of these abnormal KO with the specific color by calling function \emph{compareKOState}, it also can plot the compared network.
+To compare the abundance of enzymatic genes (KOs) across various samples, we take three strategies odds ratio, difference rank of each KO or JSD (Jensen-Shannon Divergence) to identify the abnormal KO (enrich or deplete). It will construct a compararive network, which nodes of these abnormal KO with the specific color by calling function \emph{compareKOState}, it also can plot the compared network.
 
 \begin{figure}[!htbp]
   \begin{center}
 <<compareKOState, echo = TRUE, fig = TRUE>>==
- comparedNet <- compareKOState(KOAbund, method="OR", cutoff = c(0.5, 2))
+ comparedNet <- compareSSN(KOAbund, method="OR", cutoff = c(0.5, 2))
  summary(comparedNet)
 @
 \caption{A metabolic network for multiple sample, KOs that are associated with specific state appear as colored nodes (red=enriched, green=depleted)}\label{fig:02}
   \end{center}
 \end{figure}
+
+Subsequently, users can explore the correlations between the topological features and the differential abundance with function \textit{analyzeSSN}:
+
+<<analyzeSSN2, echo=TRUE, fig=FALSE>>==
+ abund.compare <- analyzeSSN(g)
+
+ ## network with topological features as attributes
+ topo.feature
+@
 
 \subsection{Visualization using RCytoscape}
 

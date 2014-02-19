@@ -1,7 +1,7 @@
 import(igraph)
 
-export(analyzeSSN, checkMgrastProject, compareKOState, constructMetabolicNetwork,
-  constructSSN, delMgrastInbox, estimateKOAbundance, generateMgrastWebkey,
+export(analyzeSSN, checkMgrastProject, compareSSN, constructMetabolicNetwork,
+  constructSSN, delMgrastInbox, estimateAbundance, generateMgrastWebkey,
   generateMgrastWebsession, getKOPathwayInfo, getMgrastAnnotation,
   listMgrastInbox, loadMetabolicData, loginMgrast, neighborhoodConDst,
   neighborhoodConnectivity, preprocessKOMetabolites, runMgrastAnnotation,
@@ -11,7 +11,7 @@ export(analyzeSSN, checkMgrastProject, compareKOState, constructMetabolicNetwork
 importFrom(Biobase, isUnique, listLen)
 importFrom(stringr, "str_sub<-", str_sub, str_extract_all)
 importFrom(plyr, laply)
-importFrom(ggplot2, ggplot, aes, aes_string, geom_point, stat_smooth, facet_wrap, scale_x_log10)
+importFrom(ggplot2, ggplot, aes, aes_string, geom_point, stat_smooth, facet_wrap, scale_x_log10, scale_y_log10)
 importFrom(reshape2, melt)
 importFrom(RJSONIO, fromJSON)
 importFrom(KEGGREST, keggList, keggGet)
