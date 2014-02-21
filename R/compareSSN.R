@@ -1,9 +1,14 @@
-compareKOState <- function(..., method = c("OR", "rank", "JSD"), cutoff, p.value = TRUE, 
+compareSSN <- function(..., method = c("OR", "rank", "JSD"), cutoff, p.value = TRUE, 
                            Visualization = TRUE) {
     ## odds ratio
     odds.ratio <- function(abund) {
-        ratio <- lapply(abund, function(x) apply(x, 1, function(y) sum(y)/(sum(x) - 
-            sum(y))))
+        fodds <- function(x){
+            if (is.null(dim(x)))
+                return(sapply(x, function(y)y/(sum(x) - y)))
+            else
+                return(apply(x, 1, function(y) sum(y)/(sum(x) - sum(y))))
+        }
+        ratio <- lapply(abund,fodds)
         return(odds.ratio = Reduce("/", ratio))
     }
 

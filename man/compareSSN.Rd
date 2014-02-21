@@ -1,5 +1,5 @@
-\name{compareKOState}
-\alias{compareKOState}
+\name{compareSSN}
+\alias{compareSSN}
 
 \title{
 Compare the KO difference abundance of specific state
@@ -8,7 +8,7 @@ Compare the KO difference abundance of specific state
 The function computes the difference abundance with three methods and show the compared metabolic networks.
 }
 \usage{
-compareKOState(..., method = c("OR", "rank", "JSD"), cutoff,  p.value = TRUE, Visualization = TRUE)
+compareSSN(..., method = c("OR", "rank", "JSD"), cutoff,  p.value = TRUE, Visualization = TRUE)
 }
 \arguments{
   \item{\dots}{

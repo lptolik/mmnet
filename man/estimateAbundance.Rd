@@ -1,5 +1,5 @@
-\name{estimateKOAbundance}
-\alias{estimateKOAbundance}
+\name{estimateAbundance}
+\alias{estimateAbundance}
 \title{
 Getting KO (KEGG ontology) and abundance information
 }
@@ -7,7 +7,7 @@ Getting KO (KEGG ontology) and abundance information
 This function parses MGRAST functional annotation files to retrieve the KO of the KEGG, and estimate the abundance of each KO. 
 }
 \usage{
-estimateKOAbundance(KOAnno)
+estimateAbundance(KOAnno)
 }
 \arguments{
   \item{KOAnno}{
@@ -49,6 +49,6 @@ Return a mumeric character, the name of the vector is the KO number and elements
 \examples{
 #load the test ontology data
 data(mgp10Anno)
-KOAbund <- estimateKOAbundance(mgp10Anno[[1]])
+KOAbund <- estimateAbundance(mgp10Anno[[1]])
 }
 
