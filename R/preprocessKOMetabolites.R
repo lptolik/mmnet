@@ -8,7 +8,9 @@ preprocessKOMetabolites <- function(ko.info) {
     multi.ko <- strsplit(ko[multi.ko.index], "\\s")
     ko.info[multi.ko.index, 1] <- sapply(multi.ko, function(x) x[1])
     multi.ko <- sapply(multi.ko, function(x) x[-1])
-    multi.rn.metabolites <- rep(ko.info[multi.ko.index, -1], times = listLen(multi.ko))
+    df <- ko.info[multi.ko.index, -1]
+    #multi.rn.metabolites <- rep(ko.info[multi.ko.index, -1], times = listLen(multi.ko))
+    multi.rn.metabolites <- df[rep(1:nrow(df), times = listLen(multi.ko)),]
     multi.ko.info <- cbind(unlist(multi.ko), multi.rn.metabolites)
     names(multi.ko.info) <- names(ko.info)
     ko.info <- rbind(ko.info, multi.ko.info)

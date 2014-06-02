@@ -1,7 +1,7 @@
 \name{mmnet-package}
 \alias{mmnet-package}
 \title{
-Introduction to the mmnet Package
+A metagenomic pipeline for systems biology
 }
 \description{
 The \pkg{mmnet} add-on is an implementation of mapping metagenomic data to the KEGG global metabolic pathway and constructing a systems-level network. 

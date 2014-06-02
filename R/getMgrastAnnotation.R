@@ -1,8 +1,10 @@
-getMgrastAnnotation <- function(MetagenomeID, resource = c(source = "KO", type = "ontology"), 
-    webkey = NULL) {
+getMgrastAnnotation <- function(MetagenomeID, evalue = 5, identity = 60, length = 15,
+                                resource = c(source = "KO", type = "ontology"), webkey = NULL) 
+{
     server.resource <- "http://api.metagenomics.anl.gov/1/annotation/similarity"
-    server.para <- paste(paste0(c("?", "&"), paste(c("source", "type"), resource, 
-        sep = "=")), collapse = "")
+    server.para <- paste(paste0(c("?", rep("&", 4)), paste(c("source", "type", "evalue","identity", 
+                                                            "length"), c(resource,evalue,identity,length), 
+                                                          sep = "=")), collapse = "")
     url.str <- paste0(server.resource, "/", MetagenomeID, server.para)
     message("Loading the annotations form MG-RAST...", domain = NA)
     message("The time spent in this step is proportional to the total amount of remote data...")
@@ -12,7 +14,7 @@ getMgrastAnnotation <- function(MetagenomeID, resource = c(source = "KO", type =
         if (is.null(webkey)) {
             stop("please input the webkey")
         } else {
-            private.url <- paste0(url.str[private.index], "&auth=", webkey)
+            private.url <- paste0(url.str[pivate.index], "&auth=", webkey)
             anno[private.index] <- getURL(private.url)
         }
     }

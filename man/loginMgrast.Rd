@@ -36,6 +36,6 @@ Webkey, session and curlhandle would be generated when users login to MGRAST wit
 }
 \examples{
 # need a username and password on MGRAST
-# login.info <- loginMgrast("yiluheihei","heihei")
+# login.info <- loginMgrast("mmnet","mmnet")
 }
 

@@ -36,14 +36,13 @@ degree: the most basic structural property, represents the number of its adjacen
 clustringCofficient: measures the probability that the adjacent vertices of a vertex are connected
 
 pageRank: Calculates the Google PageRank for the vertices in network
-
-
 }
+
 \value{
 a graph that add all the calculated topological features as the meta-attributes
 }
 \seealso{
-\code{\link{stripSSN}}, \code{\link{topologicalCoff}},\code{link{neighborhoodConnectivity}}
+\code{\link{stripSSN}}
 }
 \examples{
 ##

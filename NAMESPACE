@@ -1,11 +1,11 @@
 import(igraph)
 
 export(analyzeSSN, checkMgrastProject, compareSSN, constructMetabolicNetwork,
-  constructSSN, delMgrastInbox, estimateAbundance, generateMgrastWebkey,
+  delMgrastInbox, estimateAbundance, generateMgrastWebkey,
   generateMgrastWebsession, getKOPathwayInfo, getMgrastAnnotation,
-  listMgrastInbox, loadMetabolicData, loginMgrast, neighborhoodConDst,
-  neighborhoodConnectivity, preprocessKOMetabolites, runMgrastAnnotation,
-  saveMetabolicData, submitMgrastJob, topologicalCoff,
+  listMgrastInbox, loadMetabolicData, loginMgrast,
+  preprocessKOMetabolites, runMgrastAnnotation,
+  saveMetabolicData, submitMgrastJob, 
   updateKEGGPathway, uploadMgrast, stripSSN, showSSN)
 
 importFrom(Biobase, isUnique, listLen)
@@ -21,6 +21,7 @@ importFrom(XML, htmlParse, xmlDoc, xpathApply, getNodeSet, toString.XMLNode, xml
   xmlAttrs, xmlChildren, xmlValue, xmlTreeParse)
 
 importFrom(modeltools, KLdiv)
+importFrom(biom, biom_data, read_biom, ncol)
 
  
 

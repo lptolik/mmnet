@@ -24,7 +24,7 @@
 
 \section{Introduction}
 
-This manual is a brief introduction to structure, functions and uasge of \emph{mmnet} package. It demonstrates how to easily construct and analyze a system-level network with metagenomic data. The \emph{mmnet} package provides an implementation of metagenome system analysis of metagenomic data in R, utilizes a metagenomic systems biology computational framework mentioned in \citep{greenblum2012metagenomic}.
+This manual is a brief introduction to structure, functions and uasge of \emph{mmnet} package. It demonstrates a metagenomic pipline for systems biology, from raw metagenomic data annotation to network analysis. The \emph{mmnet} package provides an implementation of metagenome system analysis of metagenomic data in R, utilizes a metagenomic systems biology computational framework mentioned in \citep{greenblum2012metagenomic}.
 
 This package addresses the microbiome metabolic network construction and analysis. Below we lists the main features of \emph{mmnet}: 
 
@@ -40,10 +40,15 @@ This package addresses the microbiome metabolic network construction and analysi
 
 \subsection{Installation}
 
-\emph{mmnet} requires that \emph{KEGGREST}, \emph{igraph}, \emph{Biobase}, \emph{XML}, \emph{RCurl}, \emph{RJSONIO}, \emph{stringr}, \emph{ggplot2} are installed. These should be installed automatically when you install \emph{mmnet}. To install \emph{mmnet}, source biocLite from bioconductor:
+\emph{mmnet} requires that \emph{KEGGREST}, \emph{igraph}, \emph{Biobase}, \emph{XML}, \emph{RCurl}, \emph{RJSONIO}, \emph{stringr}, \emph{ggplot2}, \emph{biom} are installed. These should be installed automatically when you install \emph{mmnet}. To install the latest devel version \emph{mmnet}, use the devel version of bioconductor:
 
 <<install-pkg, eval=FALSE>>==
-source("http://bioconductor.org/biocLite.R")
+if (!match("BiocInstaller", installed.packages)){
+  source("http://bioconductor.org/biocLite.R")
+  biocLite("BiocInstaller")
+}
+library(BiocInstaller)
+useDevel()
 biocLite("mmnet")
 @
 
@@ -193,14 +198,20 @@ Appanrently, KO abundance across all samples was highly concordant (R>0.77)
 
 % The colored KEGG global metabolic map with example metagenomic data.
 
-Different microbiomes with various states (obese or lean) have different KO abundances. We provides function \textit{constructSSN} to strip the reference netwok to obtain the state specific metabolic network for each microbiome. The KO abundance was add to the network as a nodes attributes automatically.
+Different microbiomes with various states (obese or lean) have different KO abundances. We provides function \textit{stripSSN} to strip the reference netwok to obtain the state specific metabolic network for each microbiome. Both output from \textit{estimateKOAbundance} and a given Biological Observation Matrix (BIOM) \citep{mcdonald2012biological} format could be taken by this function. The BIOM file format (canonically pronounced biome) is designed to be a general-use format for representing biological sample by observation contingency tables. More details on BIOM file can be found in \url{http://biom-format.org/}  R package \emph{biom}. There is also a example BIOM file in directory "inst/extdata" of \emph{mmnet}. The KO abundance was add to the network as a nodes attributes automatically. 
 
 <<strip-network,echo=TRUE>>==
-  ssn <- lapply(KOAbund, constructSSN)
+  ssn <- lapply(KOAbund, stripSSN)
   g <- ssn[[3]]
   summary(g)
   abund <- get.vertex.attribute(g,"abundance",index=V(g))
   summary(abund)
+
+  ## BIOM file represents enzyme abundance
+  if (require(biom)){
+  abund2 <- read_biom(system.file("extdata", "enzymeAbund.biom", package = "mmnet"))
+  subnet <- stripSSN(abund2)
+}
 @
 
 \subsection{Topogolical analysis of SSN and abundance comparison of enzymatic genes}
