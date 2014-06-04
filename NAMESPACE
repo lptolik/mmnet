@@ -19,9 +19,8 @@ importFrom(RCurl, getURL, postForm, getForm, getCurlHandle, getCurlInfo, fileUpl
   curlGlobalInit)
 importFrom(XML, htmlParse, xmlDoc, xpathApply, getNodeSet, toString.XMLNode, xmlRoot, xmlSApply,   
   xmlAttrs, xmlChildren, xmlValue, xmlTreeParse)
-
-importFrom(modeltools, KLdiv)
-importFrom(biom, biom_data, read_biom, ncol)
+importFrom(biom, biom, biom_data, sample_metadata, observation_metadata, make_biom, read_biom, ncol)
+importFrom(flexmix, KLdiv)
 
  
 

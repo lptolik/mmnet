@@ -11,8 +11,8 @@ Description: This package gives the implementations microbiome metabolic network
              KEGG global metabolic pathway and constructing a systems-level network. The system-level network 
              and the next topological analysis will be of great help to analysis the various functional 
              properties, including regulation and metabolic functionality of the metagenome.
-Depends:  R (>= 2.14), igraph
-Imports: Biobase, RJSONIO, stringr, reshape2, ggplot2, KEGGREST, plyr, XML, RCurl, biom, modeltools (>= 0.2-21)
+Depends:  R (>= 2.14), igraph, biom (>= 0.3.13)
+Imports: Biobase, RJSONIO, stringr, reshape2, ggplot2, KEGGREST, plyr, XML, RCurl, flexmix
 Suggests: RCytoscape, graph
 License: GPL (>= 2)
 LazyLoad: yes

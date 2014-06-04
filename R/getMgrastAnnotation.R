@@ -14,7 +14,7 @@ getMgrastAnnotation <- function(MetagenomeID, evalue = 5, identity = 60, length 
         if (is.null(webkey)) {
             stop("please input the webkey")
         } else {
-            private.url <- paste0(url.str[pivate.index], "&auth=", webkey)
+            private.url <- paste0(url.str[private.index], "&auth=", webkey)
             anno[private.index] <- getURL(private.url)
         }
     }

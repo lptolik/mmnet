@@ -30,7 +30,7 @@ This package addresses the microbiome metabolic network construction and analysi
 
   \begin{itemize}
     \item Building a local KEGG orthology dataset 
-    \item Constructing the reference metabolic network
+    \item Constructing the reference metabolic networkf
     \item Annotation of metagenomic sequence reads with Metagenomics RAST sever 
     \item Estimating the abundance of enzymatic genes
     \item Constructing State Specific Network (SSN)
@@ -40,8 +40,16 @@ This package addresses the microbiome metabolic network construction and analysi
 
 \subsection{Installation}
 
-\emph{mmnet} requires that \emph{KEGGREST}, \emph{igraph}, \emph{Biobase}, \emph{XML}, \emph{RCurl}, \emph{RJSONIO}, \emph{stringr}, \emph{ggplot2}, \emph{biom} are installed. These should be installed automatically when you install \emph{mmnet}. To install the latest devel version \emph{mmnet}, use the devel version of bioconductor:
+\emph{mmnet} requires that \emph{KEGGREST}, \emph{igraph}, \emph{Biobase}, \emph{XML}, \emph{RCurl}, \emph{RJSONIO}, \emph{stringr}, \emph{ggplot2}, \emph{biom} are installed. These should be installed automatically when you install \emph{mmnet}. 
 
+Note:  the latest stable release version of the biom package just 0.3.12, \emph{mmnet} requires  \emph{biom} must be 0.3.13 or later, uses should install the latest development version of the biom package, enter the following lines in an R session:
+
+<<biom, eval=FALSE>>==
+install.packages("devtools") # if not already installed
+devtools::install_github("biom", "joey711")
+@
+
+For more functionally, please install the latest devel version \emph{mmnet}, use the devel version of bioconductor:
 <<install-pkg, eval=FALSE>>==
 if (!match("BiocInstaller", installed.packages)){
   source("http://bioconductor.org/biocLite.R")
@@ -58,7 +66,7 @@ User can load the \emph{mmnet} to the current workspace by typing or pasting the
 library(mmnet)
 @
 
-\subsection{Further help} 
+subsection{Further help} 
 To view the \emph{mmnet} description and a summary of all the functions within \emph{mmnet} type the following:
 
 <<help-pkg,results=hide,eval=FALSE>>==
@@ -75,7 +83,7 @@ The test data is consisting of several microbiomes from twin pairs and their mot
 
 \subsection{Local KEGG orthology dataset and reference metabolic network constructing}
 
-This package takes KEGG database to annotate enzymatic genes with metabolic reactions which is the basis representation for all proteins and functional RNAs corresponding to KEGG pathway nodes, BRITE hiearchy nodes, and KEGG module nodes to annotation the microbiome.  The KEGG metabolic pathway is the best organized part of KEGG PATHWAY database, and also is a network of KO-KO  relations \citep{kanehisa2000kegg}. It is composed of KO, substrate and product of KO, and have been applied widely to create genome-scale metabolic networks of various microbial species \citep{oberhardt2009applications}. 
+This package takes KEGG database to annotate enzymatic genes with metabolic reactions which is the basis representation for all proteins and functional RNAs corresponding to KEGG pathway nodes, BRITE hiearchy nodes, and KEGG module nodes to annotation the microbiome.  The KEGG metabolic pathway is the best organized part of KEGG PATHWAY database, and also is a network of KO-KO  relations \citep{kanehisa2000kegg}. It is composed of KO, substrate and product of KO, and have been applied widely to create genome-scale metabolic networks of various microbial species \citep{oberhardt2009applications}. \emph{This small reference data was obtained with the KEGG free REST API.}
 
 An initial reference data named \textit{RefDbcache.rda} was saved in "data" subdirectory of \emph{mment}, that contains KOs and anntated with a metabolic reaction. Morever, an KO based reference metabolic network was also saved in \textit{RefDbcache.rda}, where nodes represent enzymes (KOs), and the directed edge from enzyme A to enzyme B indicates that a product metabolite of a reaction catalyzed by enzyme A is a substrate metabolite of a reaction catalyzed by enzyme B. Howerver, KEGG database updated frequently, reference data can be updated by function \textit{updateMetabolicNetwork} manually and saved in the directory user specified. 
 
@@ -155,33 +163,23 @@ As mentioned above, a public dataset \citep{turnbaugh2008core} was taken for exa
   summary(mgp10Anno)
 @
 
-To estimate the abundance of enzymatic genes, \textit{estimateAbundance} function should be called for each sample.
+To estimate the abundance of enzymatic genes, \textit{estimateAbundance} function should be called for each sample. A widely used in metagenomic analys format - Biological Observation Matrix (BIOM) \citep{mcdonald2012biological} format will be return by this function. The BIOM file format (canonically pronounced biome) is designed to be a general-use format for representing biological sample by observation contingency tables. More details on BIOM file can be found in \url{http://biom-format.org/}  R package \emph{biom}
 
 <<estimate,echo=TRUE>>==
- KOAbund <- lapply(mgp10Anno,estimateAbundance)
- summary(KOAbund)
- lapply(KOAbund,head,7)
+ KOAbund <- estimateAbundance(mgp10Anno)
+ show(KOAbund)
 @
 
-For comparative analysis among samples with different state (e.g. obese or lean, correlation coefficient was used to measure relative KO abundance across the samples.
+For comparative analysis among samples with different state (e.g. obese or lean), correlation coefficient was used to measure relative KO abundance across the samples.
 
 <<correlation,echo=TRUE>>==
-## ko union among all microbiome, abundance of absent KOs is set to 0
- kos <- lapply(KOAbund,names)
- nodes <- unique(unlist(kos))
- diff.ko <- lapply(kos,function(x)setdiff(nodes,x))
- extend.abund <- as.data.frame(mapply(function(x,y)c(x,y),KOAbund,
-  lapply(diff.ko,function(x){abund=rep(0,length(x));names(abund)=x;return(abund)})))
- ## sort the abundance according to a sample
- kos.index <- as.data.frame(apply(as.data.frame(mapply(function(x,y)c(x,y),
-  kos[-1],diff.ko[-1])),2,function(x)match(nodes,x)))
- extend.abund[-1] <- mapply(function(x,y)x[y],extend.abund[-1],kos.index)
- extend.abund <- (sapply(extend.abund,function(x)x/sum(x)))
- cor(extend.abund,method="pearson")
+## pearson correlation
+ data <- biom_data(KOAbund)
+ cor(as.matrix(data),method = "pearson")
 @
-Appanrently, KO abundance across all samples was highly concordant (R>0.77)
+ Appanrently, KO abundance across all samples was highly concordant (R>0.77)
 
-\subsection{Constructing State Specific Network}
+ \subsection{Constructing State Specific Network}
 
 % The \emph{mmnet} provides function \emph{mapAnnotoKEGGPathway} for mapping the KOs  on KEGG global metabolic pathway. This function returns an url of colored map, users may automated open the url by optional "browse" or manually open it.
 
@@ -198,20 +196,14 @@ Appanrently, KO abundance across all samples was highly concordant (R>0.77)
 
 % The colored KEGG global metabolic map with example metagenomic data.
 
-Different microbiomes with various states (obese or lean) have different KO abundances. We provides function \textit{stripSSN} to strip the reference netwok to obtain the state specific metabolic network for each microbiome. Both output from \textit{estimateKOAbundance} and a given Biological Observation Matrix (BIOM) \citep{mcdonald2012biological} format could be taken by this function. The BIOM file format (canonically pronounced biome) is designed to be a general-use format for representing biological sample by observation contingency tables. More details on BIOM file can be found in \url{http://biom-format.org/}  R package \emph{biom}. There is also a example BIOM file in directory "inst/extdata" of \emph{mmnet}. The KO abundance was add to the network as a nodes attributes automatically. 
+Different microbiomes with various states (obese or lean) have different KO abundances. We provides function \textit{stripSSN} to strip the reference netwok to obtain the state specific metabolic network for each microbiome. It could take the output of function \emph{estimateAbundance} as input. Moreover, while samples has been annotated with other tools (e.g. blast to KEGG locally), users could create their own BIOM file represents enzymatic genes abundance. The KO abundance was add to the network as a nodes attributes automatically. 
 
 <<strip-network,echo=TRUE>>==
-  ssn <- lapply(KOAbund, stripSSN)
+  ssn <- stripSSN(KOAbund)
   g <- ssn[[3]]
   summary(g)
   abund <- get.vertex.attribute(g,"abundance",index=V(g))
   summary(abund)
-
-  ## BIOM file represents enzyme abundance
-  if (require(biom)){
-  abund2 <- read_biom(system.file("extdata", "enzymeAbund.biom", package = "mmnet"))
-  subnet <- stripSSN(abund2)
-}
 @
 
 \subsection{Topogolical analysis of SSN and abundance comparison of enzymatic genes}
@@ -243,7 +235,7 @@ To compare the abundance of enzymatic genes (KOs) across various samples, we tak
 
 \begin{figure}[!htbp]
   \begin{center}
-<<compareKOState, echo = TRUE, fig = TRUE>>==
+<<compareState, echo = TRUE, fig = TRUE>>==
  comparedNet <- compareSSN(KOAbund, method="OR", cutoff = c(0.5, 2))
  summary(comparedNet)
 @
@@ -327,7 +319,6 @@ The version number of R and packages loaded for generating the vignette were:
 <<echo=FALSE>>=
 sessionInfo()
 @
-
 
 \section*{Cleanup}
 

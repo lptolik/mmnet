@@ -8,11 +8,11 @@ Compare the KO difference abundance of specific state
 The function computes the difference abundance with three methods and show the compared metabolic networks.
 }
 \usage{
-compareSSN(..., method = c("OR", "rank", "JSD"), cutoff,  p.value = TRUE, Visualization = TRUE)
+compareSSN(abundance, method = c("OR", "rank", "JSD"), cutoff,  p.value = TRUE, Visualization = TRUE)
 }
 \arguments{
-  \item{\dots}{
-a list of ko abundance profile to be compared, name of abundance profile must represented the sample state
+  \item{abundance}{
+a BIOM abundance profile to be compared, \emph{colname} of the biom data represents the state of sample 
 }
   \item{method}{
 method used to mesure the difference abundance, more description in details
