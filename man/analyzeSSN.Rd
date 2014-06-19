@@ -11,7 +11,7 @@ analyzeSSN(g, Scatterplot = TRUE, .properties = c("betweennessCentrality", "degr
 }
 \arguments{
   \item{g}{
-a igraph network of a specific state, it can be obtained with function \code{\link{stripSSN}} 
+a igraph network of a specific state, it can be obtained with function \code{\link{constructSSN}} 
 }
   \item{Scatterplot}{
 logical, if show the scatterplot between topolagical features and abundance
@@ -42,7 +42,7 @@ pageRank: Calculates the Google PageRank for the vertices in network
 a graph that add all the calculated topological features as the meta-attributes
 }
 \seealso{
-\code{\link{stripSSN}}
+\code{\link{constructSSN}}
 }
 \examples{
 ##
@@ -50,6 +50,6 @@ data(mgp10Anno)
 data(RefDbcache)
 KOAbund <- estimateAbundance(mgp10Anno[[1]])
 
-subnet  <- stripSSN(KOAbund)
+subnet  <- constructSSN(KOAbund)
 analyzeSSN(subnet)
 }

@@ -1,4 +1,4 @@
-showSSN <- function(SSN, mode = c("ref", "strip", "compared"), method = c("OR", "rank", 
+showSSN <- function(SSN, mode = c("ref", "ssn", "compared"), method = c("OR", "rank", 
     "JSD"), cutoff, ...) {
     ## vertex color for compared network
     VertexColor <- function(value, method, cutoff) {
@@ -20,8 +20,8 @@ showSSN <- function(SSN, mode = c("ref", "strip", "compared"), method = c("OR", 
     method <- match.arg(method, c("OR", "rank", "JSD"))
     if (!is.igraph(SSN)) 
         stop("not a igraph object")
-    mode <- match.arg(mode, c("ref", "strip", "compared"))
-    if (mode == "strip") {
+    mode <- match.arg(mode, c("ref", "ssn", "compared"))
+    if (mode == "ssn") {
         tmp <- get.vertex.attribute(SSN, name = "abundance", index = V(SSN)) + 1
         if (is.null(tmp)) 
             stop("error mode, please check your graph mode")

@@ -12,7 +12,7 @@ compareSSN <- function(abundance, method = c("OR", "rank", "JSD"), cutoff, p.val
         return(odds.ratio = Reduce("/", ratio))
     }
     if (!exists("RefDbcache"))
-	    data(RefDbcache)
+	    loadMetabolicData(path = Sys.getenv("HOME"))
     RefDbcache <- get("RefDbcache", envir = parent.frame())
     ##ko.abund <- c(...)
     ko.abund <- data.frame(as.matrix(biom_data(abundance)))

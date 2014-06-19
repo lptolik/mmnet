@@ -7,7 +7,7 @@ Get the annotation profile from MGRAST
 The function downloads the annotation profile in MGRAST
 }
 \usage{
-getMgrastAnnotation(MetagenomeID, evalue = 5, identity = 60, length = 15, resource = c(source = "KO", type = "ontology"), webkey = NULL)
+getMgrastAnnotation(MetagenomeID, evalue = 5, identity = 60, length = 15, resource = c(source = "KO", type = "ontology"), login.info = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,8 +28,8 @@ a two length vecter, the source you want to download, e.g.,
 c("KO","ontology") represents the ontology annotation with the KO database
 , more details in MGRAST
 }
-  \item{webkey}{
-private metagenomic data in MGRAST need a webkey to download
+  \item{login.info}{
+a list of login info generated after user login into MGRAST which consists of webkey of the file, the invlid time of your webkey, cookie, websession and curlhandle. It is unique for each users
 }
 }
 \value{

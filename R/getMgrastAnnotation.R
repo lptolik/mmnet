@@ -1,6 +1,7 @@
 getMgrastAnnotation <- function(MetagenomeID, evalue = 5, identity = 60, length = 15,
-                                resource = c(source = "KO", type = "ontology"), webkey = NULL) 
+                                resource = c(source = "KO", type = "ontology"), login.info = NULL) 
 {
+    webkey <- login.info["webkey"]
     server.resource <- "http://api.metagenomics.anl.gov/1/annotation/similarity"
     server.para <- paste(paste0(c("?", rep("&", 4)), paste(c("source", "type", "evalue","identity", 
                                                             "length"), c(resource,evalue,identity,length), 
@@ -8,11 +9,13 @@ getMgrastAnnotation <- function(MetagenomeID, evalue = 5, identity = 60, length 
     url.str <- paste0(server.resource, "/", MetagenomeID, server.para)
     message("Loading the annotations form MG-RAST...", domain = NA)
     message("The time spent in this step is proportional to the total amount of remote data...")
-    anno <- getURL(url.str)
+    tryCatch(anno <- getURL(url.str),
+        error = function(err) {stop(simpleError("Your Internet not connected or MGRAST host can not be connetecd, please try later"))}
+    )
     private.index <- which(grepl("insufficient\\s+permissions", anno))
     if (length(private.index)) {
-        if (is.null(webkey)) {
-            stop("please input the webkey")
+        if (is.null(login.info)) {
+            stop("Load private data needs account login")
         } else {
             private.url <- paste0(url.str[private.index], "&auth=", webkey)
             anno[private.index] <- getURL(private.url)

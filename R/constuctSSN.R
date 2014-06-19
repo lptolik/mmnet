@@ -1,6 +1,6 @@
-stripSSN <- function(abundance) {
+constructSSN <- function(abundance) {
     if (!exists("RefDbcache"))
-        data(RefDbcache)
+         loadMetabolicData(path = Sys.getenv("HOME"))
     RefDbcache <- get("RefDbcache", envir = parent.frame())
     if (!is.igraph(RefDbcache$network)) 
         stop("not a igraph object")

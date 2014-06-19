@@ -1,13 +1,13 @@
-\name{stripSSN}
-\alias{stripSSN}
+\name{constructSSN}
+\alias{constructSSN}
 \title{
-strip the reference metabolic network
+construct the state specific network
 }
 \description{
 Given a set of KOs of a sample with a specific state and the reference metabolic network, this function creates and returns sub-network with only the supplied nodes (KOs) and any edges between them.
 }
 \usage{
-stripSSN(abundance)
+constructSSN(abundance)
 }
 \arguments{
 \item{abundance}{ 
@@ -34,7 +34,7 @@ data(RefDbcache)
 
 data(mgp10Anno)
 abund <- estimateAbundance(mgp10Anno[[1]])
-subnet  <- stripSSN(abund)
+subnet  <- constructSSN(abund)
 
 }
 

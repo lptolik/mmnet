@@ -7,17 +7,14 @@ Annotated the sequence on MGRAST
 A completely Annotation process integrates login to MGRAST, data uploading and job submisstion.
 }
 \usage{
-runMgrastAnnotation(fn, user, userpwd, new_project)
+runMgrastAnnotation(login.info, fn, new_project)
 }
 \arguments{
+  \item{login.info}{
+web information while login to MGRAST , more details see \code{\link{loginMgrast}}  
+}
   \item{fn}{
 character,the sequence to analyze 
-}
-  \item{user}{
-character, username you have registered on MGRAST
-}
-  \item{userpwd}{
-character, password correspondance to your username
 }
   \item{new_project}{
 character, the project name
@@ -35,6 +32,6 @@ The MGRAST id for your job as well as the account.
 }
 \examples{
 ##
-# runMgrastAnnotation(seqfiles,user,userpwd,new_project)
+# runMgrastAnnotation(login.info, seqfiles,new_project)
 }
 

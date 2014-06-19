@@ -8,12 +8,13 @@ loginMgrast <- function(user, userpwd) {
         `User-Agent` = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36")
     ch <- getCurlHandle()
     data_login <- c(page = "Login", action = "perform_login", login = user, password = userpwd)
-    login <- postForm(uri = "http://metagenomics.anl.gov/", .params = data_login, 
-        .opts = list(cookiejar = "cookie"), curl = ch, httpheader = http_header, 
-        verbose = TRUE)
+    tryCatch(login <- postForm(uri = "http://metagenomics.anl.gov/", .params = data_login, 
+                    .opts = list(cookiejar = "cookie"), curl = ch, httpheader = http_header, verbose = TRUE),
+             error = function(err) {stop(simpleError("Your Internet not connected or MGRAST host can not be connetecd, please try later"))}
+    )
     cookie <- getCurlInfo(ch)[["cookielist"]]
     if (grepl("MG-RAST \\- Home", login, perl = TRUE)) {
-        cat(paste0("login successed:\n username:", user, "\tuserpwd:", userpwd, "\n"))
+        cat(paste0(user, " login successed\n"))
         ret <- generateMgrastWebkey(ch)
         ret$cookie <- cookie
         ret$session <- strsplit(ret$cookie, "\t")[[1]][[7]]

@@ -7,7 +7,7 @@ Visualiation of metabolic network
 This function able to plot metabolic network to any R device. 
 }
 \usage{
-showSSN(SSN, mode = c("ref", "strip", "compared"), method = c("OR","rank", "JSD"), cutoff, ...)
+showSSN(SSN, mode = c("ref", "ssn", "compared"), method = c("OR","rank", "JSD"), cutoff, ...)
 }
 \arguments{
   \item{SSN}{
@@ -27,7 +27,7 @@ additional plotting parameters. See \code{\link{igraph.plotting}} for the comple
 }
 }
 \details{
-There are three different metabolic networks: ref - reference global network, strip - state specific, compared - compared network between different state network. 
+There are three different metabolic networks: ref - reference global network, ssn - state specific, compared - compared network between different state network. 
 
 More details on  method to measure the difference abundance see \code{\link{compareSSN}}
 

@@ -7,11 +7,11 @@ Metabolic network construction of microbiome
 Metabolic network construction according to the metabolites among enzymes
 }
 \usage{
-constructMetabolicNetwork(RefDbcache)
+constructMetabolicNetwork(path = Sys.getenv("HOME"))
 }
 \arguments{
-  \item{RefDbcache}{
-a list, contains the KO, its metabolites, reaction in all KEGG metabolic pathway as well as an initial reference network  
+ \item{path}{
+ character, the path that reference data saved, default is the user's HOME directory. If does not exits, prestored reference metabolic data (RefDbCache) in \emph{mmnet} will be loaded.
 }
 }
 
@@ -19,6 +19,7 @@ a list, contains the KO, its metabolites, reaction in all KEGG metabolic pathway
 referce metabolic network of igraph
 }
 
+\seealso{\code{\link{loadMetabolicData}}}
 
 \examples{
 ## may take a long time

@@ -1,4 +1,4 @@
-runMgrastAnnotation <- function(fn, user, userpwd, new_project) {
+runMgrastAnnotation <- function(login.info, fn, new_project) {
     ## check project status, FALSE represents in processing, TRUE is completely
     projectStatus <- function(metagenome.id) {
         url.response <- getURL(paste0("http://api.metagenomics.anl.gov/1/metagenome/", 
@@ -11,7 +11,7 @@ runMgrastAnnotation <- function(fn, user, userpwd, new_project) {
         message("Can not find fn, please check if fn exsits!")
         return(FALSE)
     }
-    login.info <- loginMgrast(user, userpwd)
+    #login.info <- loginMgrast(user, userpwd)
     file <- listMgrastInbox(login.info)
     if (fn %in% file$files) {
         if (fn %in% names(file$locks)) {
@@ -23,7 +23,7 @@ runMgrastAnnotation <- function(fn, user, userpwd, new_project) {
     }
     uploadMgrast(login.info, fn)
     file <- listMgrastInbox(login.info)
-    while (fn %in% file$locks) {
+    while (fn %in% names(file$locks)) {
         # stop('The fn is under statistics calculation')
         Sys.sleep(10)
         file <- listMgrastInbox(login.info)
@@ -31,6 +31,7 @@ runMgrastAnnotation <- function(fn, user, userpwd, new_project) {
     if (missing(new_project)) 
         new_project <- as.character(Sys.time())
     metagenome <- submitMgrastJob(login.info, seqfile = basename(fn), new_project = new_project)
+    show(metagenome)
     metagenome.id <- str_extract_all(metagenome[[1]], "\\d+\\.\\d+")
     status <- projectStatus(metagenome.id)
     ## create txtprogressbar
@@ -52,7 +53,7 @@ runMgrastAnnotation <- function(fn, user, userpwd, new_project) {
     message("Annotation is complete...")
     message("Download the annotation profile from MGRAST server...")
     anno <- getMgrastAnnotation(paste0("mgm", metagenome.id), resource = c(source = "KO", 
-        type = "ontology"), webkey = login.info$webkey)
+        type = "ontology"), login.info = login.info)
     message("Done...")
     return(list(mgrastID = paste0("mgm", metagenome.id), KOAnnotation = anno))
 } 

@@ -1,4 +1,7 @@
 import(igraph)
+import(Matrix)
+import(methods)
+import(biom)
 
 export(analyzeSSN, checkMgrastProject, compareSSN, constructMetabolicNetwork,
   delMgrastInbox, estimateAbundance, generateMgrastWebkey,
@@ -6,23 +9,17 @@ export(analyzeSSN, checkMgrastProject, compareSSN, constructMetabolicNetwork,
   listMgrastInbox, loadMetabolicData, loginMgrast,
   preprocessKOMetabolites, runMgrastAnnotation,
   saveMetabolicData, submitMgrastJob, 
-  updateKEGGPathway, uploadMgrast, stripSSN, showSSN)
+  updateKEGGPathway, uploadMgrast, constructSSN, showSSN)
 
 importFrom(Biobase, isUnique, listLen)
 importFrom(stringr, "str_sub<-", str_sub, str_extract_all)
-importFrom(plyr, laply)
+importFrom(plyr, laply, alply, d_ply, ldply, llply )
 importFrom(ggplot2, ggplot, aes, aes_string, geom_point, stat_smooth, facet_wrap, scale_x_log10, scale_y_log10)
 importFrom(reshape2, melt)
-importFrom(RJSONIO, fromJSON)
+importFrom(RJSONIO, fromJSON, toJSON)
 importFrom(KEGGREST, keggList, keggGet)
-importFrom(RCurl, getURL, postForm, getForm, getCurlHandle, getCurlInfo, fileUpload, 
-  curlGlobalInit)
+importFrom(RCurl, getURL, postForm, getForm, getCurlHandle, getCurlInfo, fileUpload, curlGlobalInit)
 importFrom(XML, htmlParse, xmlDoc, xpathApply, getNodeSet, toString.XMLNode, xmlRoot, xmlSApply,   
   xmlAttrs, xmlChildren, xmlValue, xmlTreeParse)
-importFrom(biom, biom, biom_data, sample_metadata, observation_metadata, make_biom, read_biom, ncol)
 importFrom(flexmix, KLdiv)
-
- 
-
-
-
+importFrom(tools, file_path_sans_ext)

@@ -1,6 +1,9 @@
 checkMgrastProject <- function(login.info) {
-    response <- getForm("http://metagenomics.anl.gov/metagenomics.cgi", page = "Upload", 
-        curl = login.info$curlhandle)
+    tryCatch(
+        response <- getForm("http://metagenomics.anl.gov/metagenomics.cgi", page = "Upload", 
+            curl = login.info$curlhandle),
+         error = function(err) {stop(simpleError("Your Internet not connected or MGRAST host can not be connetecd, please try later"))}
+    )
     response <- htmlParse(response)
     user.project <- xmlDoc(getNodeSet(response, "//div[@id='sel_project_div']")[[1]])
     job.project <- xpathApply(user.project, "//option")[-1]
