@@ -1,4 +1,8 @@
 uploadMgrast <- function(login.info, file) {
+    if (!file.exists(file)) {
+        message("Can not find file, please check if file exsits!")
+        return(FALSE)
+    }
     if (any(grepl(file_path_sans_ext(basename(file)),listMgrastInbox(login.info)$files)))
         stop("sequence file have been exits in your Inbox")
     tryCatch( 

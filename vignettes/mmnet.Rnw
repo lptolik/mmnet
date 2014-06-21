@@ -98,6 +98,8 @@ Second, function \textit{uploadMgrast} was used to upload the sequence file to y
   uploadMgrast(login.info, "507.fna.gz")
 @
 
+\emph{Note: Uploaded files may be removed from your inbox after 72 hours. Please perform submission of your files within that time frame.}
+
 Once sequence file is uploaded to your MGRAST inbox, users could submit your MGRAST job to annotate the sequence in your inbox with function \textit{submitMgrastJob}.
 
 <<submit-mgrast, eval=FALSE, echo=TRUE>>== 
