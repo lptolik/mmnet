@@ -1,4 +1,4 @@
-compareSSN <- function(abundance, method = c("OR", "rank", "JSD"), cutoff, p.value = TRUE, 
+differentialAnalyzeNet <- function(ssns, sample.state, method = c("OR", "rank", "JSD"), cutoff, p.value = TRUE, 
                            Visualization = TRUE) {
     ## odds ratio
     odds_ratio <- function(abund) {
@@ -15,19 +15,30 @@ compareSSN <- function(abundance, method = c("OR", "rank", "JSD"), cutoff, p.val
 	    loadMetabolicData(path = Sys.getenv("HOME"))
     RefDbcache <- get("RefDbcache", envir = parent.frame())
     ##ko.abund <- c(...)
-    ko.abund <- data.frame(as.matrix(biom_data(abundance)))
-    kos <- rownames(ko.abund)
+    abund <- lapply(ssns, function(x){
+      abund = get.vertex.attribute((x), name="abundance")
+      v.name = V(x)$name
+      return(data.frame(v.name, abund))
+    })
+    abund <- Reduce(function(x, y)merge(x, y, by="v.name", all=TRUE),abund) 
+    abund[is.na(abund)] <- 0
+    #ko.abund <- data.frame(as.matrix(biom_data(abundance)))
+    #kos <- rownames(ko.abund)
+    kos <- as.character(abund[,1])
+    ko.abund <- abund[,c(2,3)]
     ko.abund <- data.frame(lapply(ko.abund,function(x)x/sum(x)))
     ## odds ratio
-    
-    colnames(ko.abund) <- gsub("\\.\\d+","", colnames(ko.abund))
-    state <- unique(colnames(ko.abund))
+    if (length(sample.state) != ncol(ko.abund))
+      stop("length of sample state must be equal to number of samples")
+    #colnames(ko.abund) <- gsub("\\.\\d+","", colnames(ko.abund))
+    #state <- unique(colnames(ko.abund))
+    state <- unique(sample.state)
     method <- match.arg(method, c("OR", "rank", "JSD"))
     if (length(state) == 0) 
-        stop("input should have names attributes: the state of the metagenome")
+        stop("Please input the sample state")
     if (length(state) != 2) 
-        stop("state of the metagenome must be 2", domain = NULL)
-    index <- lapply(c(1, 2), function(x) which(match(colnames(ko.abund), state) == x))
+        stop("Differential analysis needed samples have two different state", domain = NULL)
+    index <- lapply(c(1, 2), function(x) which(match(sample.state, state) == x))
     names(index) <- state
     g <- induced.subgraph(RefDbcache$network, intersect(kos, V(RefDbcache$network)$name))
     abund <- lapply(index, function(x) ko.abund[, x])
@@ -46,7 +57,7 @@ compareSSN <- function(abundance, method = c("OR", "rank", "JSD"), cutoff, p.val
         OR <- OR[match(V(g)$name, kos)]
         g <- set.vertex.attribute(g, name = "OR", value = OR, index = V(g))
         if (Visualization) 
-            showSSN(g, mode = "compared", method = "OR", cutoff = c(0.5, 2), vertex.label = NA, 
+            showMetagenomicNet(g, mode = "compared", method = "OR", cutoff = c(0.5, 2), vertex.label = NA, 
                 edge.width = 0.3, edge.arrow.size = 0.1, edge.arrow.width = 0.1, 
                 layout = layout.fruchterman.reingold, vertex.size = 3)
     }
@@ -59,7 +70,7 @@ compareSSN <- function(abundance, method = c("OR", "rank", "JSD"), cutoff, p.val
         diff.rank <- diff.rank[match(V(g)$name, kos)]
         g <- set.vertex.attribute(g, name = "diffabund", value = diff.rank, index = V(g))
         if (Visualization) 
-            showSSN(g, mode = "compared", method = "rank", cutoff = c(0.1, 0.9), 
+            showMetagenomicNet(g, mode = "compared", method = "rank", cutoff = c(0.1, 0.9), 
                 vertex.label = NA, edge.width = 0.3, edge.arrow.size = 0.1, edge.arrow.width = 0.1, 
                 layout = layout.fruchterman.reingold, vertex.size = 3)
     }
@@ -76,7 +87,7 @@ compareSSN <- function(abundance, method = c("OR", "rank", "JSD"), cutoff, p.val
         JSD <- JSD[match(V(g)$name, kos)]
         g <- set.vertex.attribute(g, name = "JSD", value = JSD, index = V(g))
         if (Visualization) 
-            showSSN(g, mode = "compared", method = "JSD", cutoff = c(0.1, 0.9), vertex.label = NA, 
+            showMetagenomicNet(g, mode = "compared", method = "JSD", cutoff = c(0.1, 0.9), vertex.label = NA, 
                 edge.width = 0.3, edge.arrow.size = 0.1, edge.arrow.width = 0.1, 
                 layout = layout.fruchterman.reingold, vertex.size = 3)
     }

@@ -1,4 +1,4 @@
-showSSN <- function(SSN, mode = c("ref", "ssn", "compared"), method = c("OR", "rank", 
+showMetagenomicNet <- function(net, mode = c("ref", "ssn", "compared"), method = c("OR", "rank", 
     "JSD"), cutoff, ...) {
     ## vertex color for compared network
     VertexColor <- function(value, method, cutoff) {
@@ -16,47 +16,47 @@ showSSN <- function(SSN, mode = c("ref", "ssn", "compared"), method = c("OR", "r
         return(vertex.color)
     }
     
-    SSN <- delete.vertices(SSN, names(which(igraph::degree(SSN) == 0)))
+    net <- delete.vertices(net, names(which(igraph::degree(net) == 0)))
     method <- match.arg(method, c("OR", "rank", "JSD"))
-    if (!is.igraph(SSN)) 
+    if (!is.igraph(net)) 
         stop("not a igraph object")
     mode <- match.arg(mode, c("ref", "ssn", "compared"))
     if (mode == "ssn") {
-        tmp <- get.vertex.attribute(SSN, name = "abundance", index = V(SSN)) + 1
+        tmp <- get.vertex.attribute(net, name = "abundance", index = V(net)) + 1
         if (is.null(tmp)) 
             stop("error mode, please check your graph mode")
         vertex.size2 <- c(1:length(tmp))
         vertex.size2[which(tmp == 1)] <- 2
         vertex.size2[which(tmp != 1)] <- 2 + log(tmp[which(tmp != 1)])
-        plot.igraph(SSN, vertex.size = vertex.size2, ...)
+        plot.igraph(net, vertex.size = vertex.size2, ...)
     }
     if (mode == "ref") {
-        plot.igraph(SSN, ...)
+        plot.igraph(net, ...)
     }
     if (mode == "compared") {
         if (method == "OR") {
-            OR <- get.vertex.attribute(SSN, name = "OR", index = V(SSN))
+            OR <- get.vertex.attribute(net, name = "OR", index = V(net))
             if (is.null(OR)) 
                 stop("error mode, please check your graph mode")
             vertex.color <- VertexColor(OR, method = "OR", cutoff = c(0.5, 2))
-            plot.igraph(SSN, vertex.color = vertex.color, ...)
+            plot.igraph(net, vertex.color = vertex.color, ...)
         }
         if (method == "rank") {
-            diffabund <- get.vertex.attribute(SSN, name = "diffabund", index = V(SSN))
+            diffabund <- get.vertex.attribute(net, name = "diffabund", index = V(net))
             if (is.null(diffabund)) 
                 stop("error mode, please check your graph mode")
             vertex.color <- VertexColor(diffabund, method = "rank", cutoff = c(0.1, 
                 0.9))
-            plot.igraph(SSN, vertex.size = 3, vertex.color = vertex.color, ...)
+            plot.igraph(net, vertex.size = 3, vertex.color = vertex.color, ...)
         }
         if (method == "JSD") {
-            JSD <- get.vertex.attribute(SSN, name = "JSD", index = V(SSN))
+            JSD <- get.vertex.attribute(net, name = "JSD", index = V(net))
             if (is.null(JSD)) 
                 stop("error mode, please check your graph mode")
             vertex.color <- VertexColor(JSD, method = "JSD", cutoff = c(0.1, 0.9))
             if (is.null(JSD)) 
                 stop("error mode, please check your graph mode")
-            plot.igraph(SSN, vertex.color = vertex.color, ...)
+            plot.igraph(net, vertex.color = vertex.color, ...)
         }
     }
     

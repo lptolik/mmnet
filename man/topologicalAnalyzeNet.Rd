@@ -1,5 +1,5 @@
-\name{analyzeSSN}
-\alias{analyzeSSN}
+\name{topologicalAnalyzeNet}
+\alias{topologicalAnalyzeNet}
 \title{
 Analyze the specific state network 
 }
@@ -7,7 +7,7 @@ Analyze the specific state network
 Calculate Topological features of each node and linked with abundance attributes.
 }
 \usage{
-analyzeSSN(g, Scatterplot = TRUE, .properties = c("betweennessCentrality", "degree", "clusteringCoefficient", "pageRank"), mode = c("all", "in", "out"), ...)
+topologicalAnalyzeNet(g, Scatterplot = TRUE, .properties = c("betweennessCentrality", "degree", "clusteringCoefficient", "pageRank"), mode = c("all", "in", "out"), ...)
 }
 \arguments{
   \item{g}{
@@ -46,10 +46,10 @@ a graph that add all the calculated topological features as the meta-attributes
 }
 \examples{
 ##
-data(mgp10Anno)
+data(anno)
 data(RefDbcache)
-KOAbund <- estimateAbundance(mgp10Anno[[1]])
+KOAbund <- estimateAbundance(anno[[1]])
 
 subnet  <- constructSSN(KOAbund)
-analyzeSSN(subnet)
+topologicalAnalyzeNet(subnet)
 }

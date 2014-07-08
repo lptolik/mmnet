@@ -32,8 +32,8 @@ new graph object will be return, and the abundance is added as a vertex meta-att
 # load reference metabolic network 
 data(RefDbcache)
 
-data(mgp10Anno)
-abund <- estimateAbundance(mgp10Anno[[1]])
+data(anno)
+abund <- estimateAbundance(anno[[1]])
 subnet  <- constructSSN(abund)
 
 }

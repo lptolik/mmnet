@@ -1,19 +1,22 @@
-\name{compareSSN}
-\alias{compareSSN}
+\name{differentialAnalyzeNet }
+\alias{differentialAnalyzeNet }
 
 \title{
-Compare the KO difference abundance of specific state
+the KO difference abundance of specific state
 }
 \description{
-The function computes the difference abundance with three methods and show the compared metabolic networks.
+The function computes the difference abundance with three methods and show the differential abundance comparison metabolic networks.
 }
 \usage{
-compareSSN(abundance, method = c("OR", "rank", "JSD"), cutoff,  p.value = TRUE, Visualization = TRUE)
+differentialAnalyzeNet (ssns, sample.state, method = c("OR", "rank", "JSD"), cutoff,  p.value = TRUE, Visualization = TRUE)
 }
 \arguments{
-  \item{abundance}{
-a BIOM abundance profile to be compared, \emph{colname} of the biom data represents the state of sample 
+  \item{ssns}{
+the state specific network for differential comparison 
 }
+  \item{sample.state}{
+a character vector, represents the state of sample. Apparently, its length is equal to  number of samples 
+  }
   \item{method}{
 method used to mesure the difference abundance, more description in details
 }
@@ -24,12 +27,12 @@ numeric vector with length 2, specifies the difference thereshold
 logical, whether p value is caculated, Wilcoxon rank-sum test to limit enzymes that enriched or depleted
 }
   \item{Visualization}{
-logical, whether plot the compared metabolic network
+logical, whether plot the differential metabolic network
 }
 }
 \details{
 This function only applicable to compare the abundance profile between samples in different states (e.g., lean vs. obese). States is added to the abundance profile 
-as the name attribute.
+as the name attribute. Abundance were normalized within each sample to represent the relative abundance of each enzyme (KO) in each sample before comparison, thereby accounting for differences in sampling depth.
 
 
 The selection of method to measure the enrichment is a non-trival component of comparative metagenomic analysis, since statistical results can be heavily influenced by missing data, sample size, data magnitute, normalization technique, or assumptions of the distribution of values. 
@@ -41,7 +44,7 @@ RANK: first ranking the enzymes within each sample from most abundant to least a
  JSD is the Jensen-Shannon divergence measure to quantify the similarity bewteen the distributions of enzyme in samples in different state. Note it only suitable for a large enough
  sample size.
 
-cutoff: more description see \code{\link{showSSN}}
+cutoff: more description see \code{\link{showMetagenomicNet}}
 }
 \value{
 a igraph with the diference abundance as a node attribute

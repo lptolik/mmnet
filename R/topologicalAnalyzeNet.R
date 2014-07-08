@@ -1,4 +1,4 @@
-analyzeSSN <- function(g, Scatterplot = TRUE, .properties = c("betweennessCentrality", 
+topologicalAnalyzeNet <- function(g, Scatterplot = TRUE, .properties = c("betweennessCentrality", 
                         "degree", "clusteringCoefficient", "pageRank"), 
                         mode = c("all", "in", "out"), ...) {
   

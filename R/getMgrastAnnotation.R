@@ -1,36 +1,52 @@
 getMgrastAnnotation <- function(MetagenomeID, evalue = 5, identity = 60, length = 15,
                                 resource = c(source = "KO", type = "ontology"), login.info = NULL) 
 {
-    webkey <- login.info["webkey"]
-    server.resource <- "http://api.metagenomics.anl.gov/1/annotation/similarity"
-    server.para <- paste(paste0(c("?", rep("&", 4)), paste(c("source", "type", "evalue","identity", 
-                                                            "length"), c(resource,evalue,identity,length), 
-                                                          sep = "=")), collapse = "")
-    url.str <- paste0(server.resource, "/", MetagenomeID, server.para)
-    message("Loading the annotations form MG-RAST...", domain = NA)
-    message("The time spent in this step is proportional to the total amount of remote data...")
-    tryCatch(anno <- getURL(url.str),
-        error = function(err) {stop(simpleError("Your Internet not connected or MGRAST host can not be connetecd, please try later"))}
-    )
-    private.index <- which(grepl("insufficient\\s+permissions", anno))
-    if (length(private.index)) {
-        if (is.null(login.info)) {
-            stop("Load private data needs account login")
-        } else {
-            private.url <- paste0(url.str[private.index], "&auth=", webkey)
-            anno[private.index] <- getURL(private.url)
+    if (!is.null(login.info))
+      public <- FALSE
+    else
+      public <- TRUE
+    status <- checkMgrastMetagenome(metagenome.id = MetagenomeID, login.info = login.info, public = public)
+    if (status){
+      MetagenomeID <- paste0("mgm", MetagenomeID)
+      server.resource <- "http://api.metagenomics.anl.gov/1/annotation/similarity/"
+      server.resource <- paste0(server.resource,MetagenomeID)
+      message(paste("Loading the annotations form MG-RAST of", MetagenomeID), domain = NA)
+      message("The time spent in this step is proportional to the total amount of remote data...")
+      if (!is.null(login.info)){
+        webkey <- login.info["webkey"]
+        param <- list(source = resource["source"], type = resource["type"], evalue = evalue, 
+             identity = identity, length = length, auth = webkey)
+      }else{
+        param <- list(source = resource["source"], type = resource["type"], evalue = evalue, 
+                      identity = identity, length = length)
+      }
+      anno <- tryCatch(
+        getForm(server.resource,
+                .params = param,
+                .opts=list(noprogress = FALSE, 
+                           progressfunction = function(down,up){
+                             cat(paste('\r', "loading", paste0(round(down[2]/1024^2, 2),"MB"),"..."))
+                             flush.console()
+                           })
+        ),
+        error = function(e) {
+          msg <- conditionMessage(e)
+          structure(msg, class = "try-error")
         }
-    }
-    invalid.index <- which(grepl("does\\s+not\\s+exists", anno))
-    invalid.source <- which(grepl("Invalid\\s+ontology\\s+source", anno))
-    if (length(invalid.source)) 
+      )
+      if (inherits(anno, "try-error")){
+        warning(anno)
+        return(FALSE)
+      }
+      invalid.source <- which(grepl("Invalid\\s+ontology\\s+source", anno))
+      if (length(invalid.source)) 
         stop("invalid ontology source")
-    if (length(invalid.index)) 
-        stop(paste("The", paste(invalid.index, collapse = ","), "metagenomeID does not exists"))
-    if (length(which(grepl("insufficient\\s+permissions", anno)))) 
+      if (length(which(grepl("insufficient\\s+permissions", anno)))) 
         stop("invalid webkey")
-    # anno <- lapply(as.list(anno), function(x) read.delim(textConnection(x), header = FALSE, 
-    #     sep = "\t", stringsAsFactor = F))
-    anno <- read.delim(textConnection(anno), header = FALSE, sep = "\t", stringsAsFactor = F)
-    return(anno)
+      anno <- read.delim(textConnection(anno), header = FALSE, sep = "\t", stringsAsFactor = F)
+      return(anno)
+      cat("\n",MetagenomeID, "annotation data loading completed")      
+    }else{
+      return(NULL)
+    }   
 } 

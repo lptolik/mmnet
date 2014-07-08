@@ -18,6 +18,6 @@ character, represents the file your will delete
 }
 }
 \details{
-Users can delete files from the inbox on MG-RAST, Filenames in your Inbox are undergoing analysis and cannot be moved or submitted to a different process until analysis is complete. \code{\link{checkMgrastProject}} can be used to check the status of your files
+Users can delete files from the inbox on MG-RAST, Filenames in your Inbox are undergoing analysis and cannot be moved or submitted to a different process until analysis is complete.
 }
 

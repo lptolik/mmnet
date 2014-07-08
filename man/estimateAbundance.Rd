@@ -48,7 +48,7 @@ Return a a given Biological Observation Matrix (BIOM) format, the ncol of the BI
 
 \examples{
 #load the test ontology data
-data(mgp10Anno)
-KOAbund <- estimateAbundance(mgp10Anno[[1]])
+data(anno)
+KOAbund <- estimateAbundance(anno[[1]])
 }
 

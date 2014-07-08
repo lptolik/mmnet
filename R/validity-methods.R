@@ -1,9 +1,6 @@
 ################################################################################
-# This function is from package biom https://github.com/joey711/biom, authored by Paul J. McMurdie
-################################################################################
-
 # Validity methods:
-#
+#  This function is from package biom https://github.com/joey711/biom, authored by Paul J. McMurdie
 # These are delicate, because they are effectively at the S4 infrastructure
 # level, in between "new" and the constructor. Some of the issues that might
 # otherwise go here can be also be dealt with in the constructors, if needed.

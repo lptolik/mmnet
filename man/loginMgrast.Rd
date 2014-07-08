@@ -32,7 +32,7 @@ Webkey, session and curlhandle would be generated when users login to MGRAST wit
 \item{curlhandle}{class of CURLHandle, the curl handle while users to MGRAST which is saved for user's sebsequent analysis with MGRAST.}
 }
 \seealso{
-\code{\link{uploadMgrast}},\code{\link{runMgrastAnnotation}},\code{\link{runMgrastAnnotation}}
+\code{\link{uploadMgrast}}
 }
 \examples{
 # need a username and password on MGRAST
