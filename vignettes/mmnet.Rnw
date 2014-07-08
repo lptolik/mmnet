@@ -68,7 +68,7 @@ biocLite("mmnet")
 
 It should be noted that the function call useDevel() calling is necessary and it is always recommended installing the latest development version, which has more functions available and a lot of bugs fixed.
 
-After installation, the \emph{mmnet} is ready to load into the current workspace by the following codesto the current workspace by typing or pasting the following codes:
+After installation, the \emph{mmnet} is ready to load into the current workspace by the following codes to the current workspace by typing or pasting the following codes:
 
 <<load-pkg,eval=TRUE, include=FALSE>>==
 library(mmnet)
@@ -89,11 +89,11 @@ library(mmnet)
 
 \section{Analysis Pipeline: from raw Metagenomic Sequence Data to Metabolic Network Analysis}
 
-We will demonstrate go through an analysis pipeline to illustrate some of the main functions in mmnet. This pipeline consists of several steps:
+We will demonstrate go through an analysis pipeline to illustrate some of the main functions in \emph{mmnet}. This pipeline consists of several steps:
 
 \begin{enumerate}
 \item  Raw metagenomic sequence data: prepare a specific amount of sequence data ready 
-       to  analyze from metagenomic studies. You can get the data by shortgun sequencing or download raw data available online. Here we download a sample data from ftp of MG-RAST.
+       to  analyze from metagenomic studies. You can get the data by short-gun sequencing or download raw data available online. Here we download a sample data from ftp of MG-RAST.
 
 \item Functional annotation: raw reads must be processed for functional annotation to 
       mapping to enzyme libraries with existing knowledge, such as KEGG database.
@@ -182,7 +182,7 @@ Once the annotation process completes, the  metagenome ID can be obtained by fun
 @
 
 
-For convinence, we have save this annotation profiles in \emph{mmnet} names \textit{'anno.rda'}. See \textit{'anno'} for more details. Loading annotation profiles as follows:
+For  convenience, we have save this annotation profiles in \emph{mmnet} names \textit{'anno.rda'}. See \textit{'anno'} for more details. Loading annotation profiles as follows:
 
 <<data-load>>==
 data(anno)
@@ -235,7 +235,7 @@ anno <- getMgrastAnnotation(metagenome.id2, login.info=login.info)
 
 \subsection{Estimating the abundance of enzymatic genes}
 
-Enzyme abundance varies in different biological states. Enzymatic gene abundances are important for microbial marker-gene and disease study, especially for linking microbial genes with the host state. Here, we estimate Enzymatic gene abundances based on read counts with a normalization procedure.
+Enzyme abundance varies in different biological states. Enzymatic gene abundances are important for microbial marker-gene and disease study, especially for linking microbial genes with the host state. Here, we estimate enzymatic gene abundances based on read counts with a normalization procedure.
 
 %\subsubsection{Example Data}
 
@@ -249,7 +249,7 @@ Enzyme abundance varies in different biological states. Enzymatic gene abundance
 %
 %subsubsection{Estimating the abundance of enzymatic genes}
 
-To estimate the abundance of enzymatic genes, \textit{estimateAbundance} function should be called for each sample. A widely used in metagenomic analys format - Biological Observation Matrix (BIOM) \citep{mcdonald2012biological} format will be return by this function. The BIOM file format (canonically pronounced biome) is designed to be a general-use format for representing biological sample by observation contingency tables. More details on BIOM file can be found in \url{http://biom-format.org/}.
+To estimate the abundance of enzymatic genes, \textit{estimateAbundance} function should be called for each sample. A widely used in metagenomic analysis format - Biological Observation Matrix (BIOM) \citep{mcdonald2012biological} format will be return by this function. The BIOM file format (canonically pronounced biome) is designed to be a general-use format for representing biological sample by observation contingency tables. More details on BIOM file can be found in \url{http://biom-format.org/}.
 
 <<estimate, echo=TRUE>>==
  mmnet.abund <- estimateAbundance(anno)
@@ -279,7 +279,7 @@ if(require(ggplot2)){
 }
 @
 
-The enzymatic gene abundances estimated by MG-RAST is uncalibrated and unoptimized compared to the method in \emph{mmnet}. As show in Figure 1, abundances in MG-RAST is over-estimated in most cases, especially on high abundance enzymatic genes. The details on abundances calibration in \emph{mmnet} is as follows: Sequences were annotated with all KOs (KEGG orthologous groups) of the top KO-associated match among the top 100 matches; Sequences with multiple top KO-associated matches with the same e-value were annotated with the union set of KOs; To make a balance between identifying low-abundance genes and reducing the error-rate of identification a threshold of 2 reads to allow the inclusion of rare genes and all KO abundances below this threshold were set to zero.  
+The enzymatic gene abundances estimated by MG-RAST is un-calibrated and un-optimized compared to the method in \emph{mmnet}. As show in Figure 1, abundances in MG-RAST is over-estimated in most cases, especially on high abundance enzymatic genes. The details on abundances calibration in \emph{mmnet} is as follows: Sequences were annotated with all KOs (KEGG orthologous groups) of the top KO-associated match among the top 100 matches; Sequences with multiple top KO-associated matches with the same e-value were annotated with the union set of KOs; To make a balance between identifying low-abundance genes and reducing the error-rate of identification a threshold of 2 reads to allow the inclusion of rare genes and all KO abundances below this threshold were set to zero.  
 
 %For comparative analysis among samples with different state (e.g. obese or lean), correlation coefficient was used to measure relative KO abundance across the samples.
 
@@ -296,7 +296,7 @@ This package takes KEGG database to annotate enzymatic genes with metabolic reac
 
  \emph{This reference metabolic data was obtained with the KEGG free REST API, about 150 KEGG reference pathways. And KEGG API is provided for academic use by academic users belonging to academic institutions. This service should not be used for bulk data downloads. Thus, our small download with KEGG API is in agreement with the license.}
 
-An initial reference data named \textit{RefDbcache.rda} was saved in "data" subdirectory of \emph{mment} that contains KOs and annotated with a metabolic reaction. Morever, an KO based reference metabolic network was also saved in \textit{RefDbcache.rda}, where nodes represent enzymes (KOs), and the directed edge from enzyme A to enzyme B indicates that a product metabolite of a reaction catalyzed by enzyme A is a substrate metabolite of a reaction catalyzed by enzyme B. As KEGG database is constantly updated, reference data can be updated by function \textit{updateMetabolicNetwork} manually and saved in the directory user specified.
+An initial reference data named \textit{RefDbcache.rda} was saved in "data" subdirectory of \emph{mment} that contains KOs and annotated with a metabolic reaction. Moreover, an KO based reference metabolic network was also saved in \textit{RefDbcache.rda}, where nodes represent enzymes (KOs), and the directed edge from enzyme A to enzyme B indicates that a product metabolite of a reaction catalyzed by enzyme A is a substrate metabolite of a reaction catalyzed by enzyme B. As KEGG database is constantly updated, reference data can be updated by function \textit{updateMetabolicNetwork} manually and saved in the directory user specified.
 
 Reference dataset can be loaded by function \textit{loadMetabolicData}
 
@@ -367,7 +367,7 @@ To compare the abundance of enzymatic genes across various samples, we take thre
 %\caption{A metabolic network for multiple sample, KOs that are associated with specific state appear as colored nodes (red=enriched, green%=depleted)}\label{fig:02}
 %  \end{center}
 %\end{figure}
-<<differential,echo=TRUE,fig.align='center',fig.cap='Differential metabolic network analyis, enzymatic genes that are associated with specific state appear as colored nodes (red=enriched, green=depleted)',dev='pdf',fig.show='hold',out.width='.7\\linewidth', out.height='.7\\linewidth'>>==
+<<differential,echo=TRUE,fig.align='center',fig.cap='Differential metabolic network analysis, enzymatic genes that are associated with specific state appear as colored nodes (red=enriched, green=depleted)',dev='pdf',fig.show='hold',out.width='.7\\linewidth', out.height='.7\\linewidth'>>==
 state <- c("obese", "lean")
 differential.net <- differentialAnalyzeNet(ssn, sample.state= state, method="OR", cutoff = c(0.5, 2))
 summary(differential.net)
@@ -400,7 +400,7 @@ showMetagenomicNet(g, mode="ssn", vertex.label = NA, edge.width = 0.3, edge.arro
 
 \section{Analysis in Cytoscape}
 
-Here is a simple example to show the reference metabolic network in Cytoscape with \textit{RCytoscape} package (Figure 5). \textit{Cytoscape2.8}, and \textit{CytoscapeRPC}: a Cytoscape plugin is requreid besides of R package RCytoscape. See \textit{RCytoscape} package for details on 'how to transfer the network and attributes from R to Cytoscape’.
+Here is a simple example to show the reference metabolic network in Cytoscape with \textit{RCytoscape} package (Figure 5). \textit{Cytoscape2.8}, and \textit{CytoscapeRPC}: a Cytoscape plugin is required besides of R package RCytoscape. See \textit{RCytoscape} package for details on 'how to transfer the network and attributes from R to Cytoscape’.
 
 Open Cytoscape,  and then activate the CytoscapeRPC plugin in Cytoscape’s Plugins menu. Click to start the XMLRPC server in the dialog, and Cytoscape will wait for commands from R. In the default setting, the communicate port is 9000 on localhost. You can choose a different port, just be sure to use that changed port number when you call the RCytoscape constructor.
 
