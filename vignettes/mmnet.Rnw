@@ -198,8 +198,7 @@ login.info <- loginMgrast("mmnet", "mmnet")
 seq <- "obesesample.fna.gz"
 ## mgrast annotation
 uploadMgrast(login.info, seq)
-metagenome.id2 <- submitMgrastJob(login.info, seqfile = basename(seq))
-%status <- checkMgrastMetagenome(metagenome.id = metagenome.id2)  
+metagenome.id2 <- submitMgrastJob(login.info, seqfile = basename(seq)) 
 while (TRUE) { 
   status <- checkMgrastMetagenome(metagenome.id = metagenome.id2)
   if (status)
@@ -209,7 +208,7 @@ while (TRUE) {
   flush.console()
 }
 ## if annotation profile is public,take login.info as NULL
-anno <- getMgrastAnnotation(metagenome.id2, login.info=login.info)
+anno2 <- getMgrastAnnotation(metagenome.id2, login.info=login.info)
 @
 %<<runMgrastJob,echo=TRUE>>==
 %## provide the MG-RAST account,rawsequence, and the project name you will creat, 
