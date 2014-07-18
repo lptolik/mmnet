@@ -60,13 +60,16 @@ The main features of \emph{mmnet}:
 %For more functionally, users should install the latest devel version \emph{mmnet}. Install the latest release of R, then get the latest version of Bioconductor by starting R and entering the commands:
 
 <<install-pkg, eval=FALSE>>==
+## install release version of mmnet
 source("http://bioconductor.org/biocLite.R")
-## Get the devlopment version of the BiocInstaller package
+biocLite("mmnet")
+
+##install the latest development version 
 useDevel()
 biocLite("mmnet")
 @
 
-It should be noted that the function call useDevel() calling is necessary and it is always recommended installing the latest development version, which has more functions available and a lot of bugs fixed.
+It should be noted that the function call useDevel() calling is chechout to the development versino of BIOCONDUCTOR and it will be install the latest development version of mmnet, which has more functions available and a lot of bugs fixed.
 
 After installation, the \emph{mmnet} is ready to load into the current workspace by the following codes to the current workspace by typing or pasting the following codes:
 
