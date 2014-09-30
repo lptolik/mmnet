@@ -25,7 +25,7 @@ differentialAnalyzeNet <- function(ssns, sample.state, method = c("OR", "rank", 
     #ko.abund <- data.frame(as.matrix(biom_data(abundance)))
     #kos <- rownames(ko.abund)
     kos <- as.character(abund[,1])
-    ko.abund <- abund[,c(2,3)]
+    ko.abund <- abund[,-1]
     ko.abund <- data.frame(lapply(ko.abund,function(x)x/sum(x)))
     ## odds ratio
     if (length(sample.state) != ncol(ko.abund))
@@ -57,7 +57,7 @@ differentialAnalyzeNet <- function(ssns, sample.state, method = c("OR", "rank", 
         OR <- OR[match(V(g)$name, kos)]
         g <- set.vertex.attribute(g, name = "OR", value = OR, index = V(g))
         if (Visualization) 
-            showMetagenomicNet(g, mode = "compared", method = "OR", cutoff = c(0.5, 2), vertex.label = NA, 
+            showMetagenomicNet(g, mode = "compared", method = "OR", cutoff = cutoff, vertex.label = NA, 
                 edge.width = 0.3, edge.arrow.size = 0.1, edge.arrow.width = 0.1, 
                 layout = layout.fruchterman.reingold, vertex.size = 3)
     }
@@ -70,7 +70,7 @@ differentialAnalyzeNet <- function(ssns, sample.state, method = c("OR", "rank", 
         diff.rank <- diff.rank[match(V(g)$name, kos)]
         g <- set.vertex.attribute(g, name = "diffabund", value = diff.rank, index = V(g))
         if (Visualization) 
-            showMetagenomicNet(g, mode = "compared", method = "rank", cutoff = c(0.1, 0.9), 
+            showMetagenomicNet(g, mode = "compared", method = "rank", cutoff = cutoff, 
                 vertex.label = NA, edge.width = 0.3, edge.arrow.size = 0.1, edge.arrow.width = 0.1, 
                 layout = layout.fruchterman.reingold, vertex.size = 3)
     }
@@ -87,7 +87,7 @@ differentialAnalyzeNet <- function(ssns, sample.state, method = c("OR", "rank", 
         JSD <- JSD[match(V(g)$name, kos)]
         g <- set.vertex.attribute(g, name = "JSD", value = JSD, index = V(g))
         if (Visualization) 
-            showMetagenomicNet(g, mode = "compared", method = "JSD", cutoff = c(0.1, 0.9), vertex.label = NA, 
+            showMetagenomicNet(g, mode = "compared", method = "JSD", cutoff = cutoff, vertex.label = NA, 
                 edge.width = 0.3, edge.arrow.size = 0.1, edge.arrow.width = 0.1, 
                 layout = layout.fruchterman.reingold, vertex.size = 3)
     }

@@ -4,9 +4,9 @@ showMetagenomicNet <- function(net, mode = c("ref", "ssn", "compared"), method =
     VertexColor <- function(value, method, cutoff) {
         vertex.color <- rep("grey", length(value))
         if (method == "OR") {
-            value <- abs(log2(value))
-            enrich.no <- which(value > cutoff[[2]])
-            deplete.no <- which(value < cutoff[[1]])
+            value <- (log2(value))
+            enrich.no <- which(value > log2(cutoff[[2]]))
+            deplete.no <- which(value < log2(cutoff[[1]]))
         } else {
             deplete.no <- which(value < quantile(value, probs = cutoff[[1]]))
             enrich.no <- which(value > quantile(value, probs = cutoff[[2]]))
