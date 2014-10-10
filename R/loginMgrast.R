@@ -24,7 +24,7 @@ loginMgrast <- function(user, userpwd) {
       return(NULL)
     }else{
         cookie <- getCurlInfo(ch)[["cookielist"]]
-        if (grepl("MG-RAST \\- Home", login, perl = TRUE)) {
+        if (grepl("page=AccountManagement", login, perl = TRUE)) {
             cat(paste0(user, " login successed\n"))
             ret <- generateMgrastWebkey(ch)
             ret$cookie <- cookie
