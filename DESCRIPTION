@@ -1,11 +1,11 @@
 Package: mmnet
 Type: Package
 Title: A metagenomic pipeline for systems biology
-Version: 1.5.0
+Version: 1.5.1
 Date: 2014-7-15
 Author: Yang Cao, Fei Li
 Maintainer: Yang Cao <yiluheihei@gmail.com>, Fei Li
-    <pittacus@gmail.com>
+ <pittacus@gmail.com>
 Description: This package gives the implementations microbiome metabolic
     network constructing and analyzing. It introduces a unique metagenomic
     systems biology approach, mapping metagenomic data to the KEGG global
@@ -13,29 +13,13 @@ Description: This package gives the implementations microbiome metabolic
     system-level network and the next topological analysis will be of great
     help to analysis the various functional properties, including regulation
     and metabolic functionality of the metagenome.
-Depends:
-    R (>= 2.14),
-    igraph,
-    biom
-Imports:
-    Biobase,
-    RJSONIO,
-    stringr,
-    reshape2,
-    ggplot2,
-    KEGGREST,
-    plyr,
-    XML,
-    RCurl,
-    flexmix,
-    Matrix,
-    methods,
-    tools
-Suggests:
-    RCytoscape,
-    graph,
-    knitr
+Depends: R (>= 2.14), igraph, biom
+Imports: Biobase, RJSONIO, stringr, reshape2, ggplot2, KEGGREST, plyr,
+        XML, RCurl, flexmix, Matrix, methods, tools
+Suggests: RCytoscape, graph, knitr
 VignetteBuilder: knitr
 License: GPL (>= 2)
 LazyLoad: yes
-biocViews: GraphsAndNetwork, Sequencing, Pathways, Microbiome, SystemsBiology
+biocViews: GraphsAndNetwork, Sequencing, Pathways, Microbiome,
+        SystemsBiology
+Packaged: 2014-10-14 04:02:04 UTC; biocbuild

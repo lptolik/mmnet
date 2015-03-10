@@ -281,7 +281,65 @@ if(require(ggplot2)){
 }
 @
 
-The enzymatic gene abundances estimated by MG-RAST is un-calibrated and un-optimized compared to the method in \emph{mmnet}. As show in Figure 1, abundances in MG-RAST is over-estimated in most cases, especially on high abundance enzymatic genes. The details on abundances calibration in \emph{mmnet} is as follows: Sequences were annotated with all KOs (KEGG orthologous groups) of the top KO-associated match among the top 100 matches; Sequences with multiple top KO-associated matches with the same e-value were annotated with the union set of KOs; To make a balance between identifying low-abundance genes and reducing the error-rate of identification a threshold of 2 reads to allow the inclusion of rare genes and all KO abundances below this threshold were set to zero.  
+
+The enzymatic gene abundances estimated by MG-RAST is un-calibrated and un-optimized compared to the method in \emph{mmnet}. As show in Figure 1, abundances in MG-RAST is over-estimated in most cases, especially on high abundance enzymatic genes. The details on abundances calibration in \emph{mmnet} is as follows: Sequences were annotated with all KOs (KEGG orthologous groups) of the top KO-associated match among the top 100 matches; Sequences with multiple top KO-associated matches with the same e-value were annotated with the union set of KOs; To make a balance between identifying low-abundance genes and reducing the error-rate of identification a threshold of 2 reads to allow the inclusion of rare genes and all KO abundances below this threshold were set to zero. 
+
+For other tools, users can download the annotated data first. Taking IMG/M for example, metagenomic annotation data from IMG/M includes the abundance information. Thus, we can construct the metabolic network without abundance estimation directly. It can be accessed as following:
+1)	In package mmnet, function to construct metabolic network takes BIOM file as input. We create the BIOM file for network construction first:
+
+<<IMGSample, eval=FALSE >>==
+## Load the IMG/M sample data
+IMGFile <- system.file("extdata/IMGSample.tab",package="mmnet")
+IMGSample <- read.delim2(IMGFile,quote = "") 
+## Create BIOM file for network construction
+abundance <- IMGSample$Gene.Count 
+abundance <- abundance/sum(abundance)
+abundance <- as.data.frame(abundance)
+KO <- IMGSample$KO.ID 
+KO <- as.data.frame(gsub("KO:","",KO)) 
+biom.data <- make_biom(abundance, observation_metadata = KO)
+biom.data$type <- "enzymatic genes abundance"
+@
+
+2)	Then we construct and analyze the SSN:
+
+<<IMGSample2, eval=FALSE >>==
+## Construct and analyze SSN
+ssn <- constructSSN(biom.data)
+topologicalAnalyzeNet(ssn)
+@
+
+Futhermore, users may have annotated the metagenomic reads locally, the annotated profile should be preprocessed in format as the MGRAST annotation profile that have 13 columns. Details:
+
+1.	Read id
+
+2.	Hit id, ref sequence id
+
+3.	percentage identity, e.g. 100.00
+
+4.	alignment length, e.g. 107
+
+5.	number of mismatches, e.g. 0
+
+6.	number of gap openings, e.g. 0
+
+7.	query start, e.g. 1
+
+8.	query .end, e.g. 107
+
+9.	hit start, e.g. 1262
+
+10.	hit .end, e.g. 1156
+
+11.	e-value, e.g. 1.7e-54
+
+12.	score in bits, e.g. 210.0
+
+13.	KEGG orthology
+
+Then we can analyze the annotation profile properly as profile from MG-RAST.
+We also have added this description to the vignette of mmnet to help users analyze the annotation profiles from the other tools. And we still strive to improve our package with good support for other tools. 
+
 
 %For comparative analysis among samples with different state (e.g. obese or lean), correlation coefficient was used to measure relative KO abundance across the samples.
 
