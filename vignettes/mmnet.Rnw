@@ -275,7 +275,7 @@ mgrast.abund1 <- biom_data(mgrast.abund)[,1][intersect.ko]
 mmnet.abund1 <- biom_data(mmnet.abund)[,1][intersect.ko]
 if(require(ggplot2)){
   p <- qplot(mgrast.abund1,mmnet.abund1) + 
-            geom_abline(slope=1, intercep=0,color="blue") +
+            geom_abline(slope=1, intercept=0,color="blue") +
             ylim(0, 400) + xlim(0, 400)
   print(p)
 }
