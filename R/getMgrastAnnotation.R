@@ -1,29 +1,35 @@
 getMgrastAnnotation <- function(MetagenomeID, evalue = 5, identity = 60, length = 15,
-                                resource = c(source = "KO", type = "ontology"), login.info = NULL) 
+                                resource = c(source = "KO", type = "ontology"), login.info = NULL,webkey=NULL)
 {
-    if (!is.null(login.info))
+    if (!is.null(login.info)&!is.null(webkey))
       public <- FALSE
     else
       public <- TRUE
-    status <- checkMgrastMetagenome(metagenome.id = MetagenomeID, login.info = login.info, public = public)
+    if(is.null(webkey))
+      status <- checkMgrastMetagenome(metagenome.id = MetagenomeID, login.info = login.info, public = public)
+    else
+      status<-TRUE
     if (status){
       MetagenomeID <- paste0("mgm", MetagenomeID)
       server.resource <- "http://api.metagenomics.anl.gov/1/annotation/similarity/"
       server.resource <- paste0(server.resource,MetagenomeID)
       message(paste("Loading the annotations form MG-RAST of", MetagenomeID), domain = NA)
       message("The time spent in this step is proportional to the total amount of remote data...")
-      if (!is.null(login.info)){
+      if(!is.null(webkey)){
+        param <- list(source = resource["source"], type = resource["type"], evalue = evalue,
+                      identity = identity, length = length, auth = webkey)
+      } else if (!is.null(login.info)){
         webkey <- login.info["webkey"]
-        param <- list(source = resource["source"], type = resource["type"], evalue = evalue, 
-             identity = identity, length = length, auth = webkey)
+        param <- list(source = resource["source"], type = resource["type"], evalue = evalue,
+                      identity = identity, length = length, auth = webkey)
       }else{
-        param <- list(source = resource["source"], type = resource["type"], evalue = evalue, 
+        param <- list(source = resource["source"], type = resource["type"], evalue = evalue,
                       identity = identity, length = length)
       }
       anno <- tryCatch(
         getForm(server.resource,
                 .params = param,
-                .opts=list(noprogress = FALSE, 
+                .opts=list(noprogress = FALSE,
                            progressfunction = function(down,up){
                              cat(paste('\r', "loading", paste0(round(down[2]/1024^2, 2),"MB"),"..."))
                              flush.console()
@@ -39,14 +45,14 @@ getMgrastAnnotation <- function(MetagenomeID, evalue = 5, identity = 60, length 
         return(FALSE)
       }
       invalid.source <- which(grepl("Invalid\\s+ontology\\s+source", anno))
-      if (length(invalid.source)) 
+      if (length(invalid.source))
         stop("invalid ontology source")
-      if (length(which(grepl("insufficient\\s+permissions", anno)))) 
+      if (length(which(grepl("insufficient\\s+permissions", anno))))
         stop("invalid webkey")
       anno <- read.delim(textConnection(anno), header = FALSE, sep = "\t", stringsAsFactor = F)
       return(anno)
-      cat("\n",MetagenomeID, "annotation data loading completed")      
+      cat("\n",MetagenomeID, "annotation data loading completed")
     }else{
       return(NULL)
-    }   
-} 
+    }
+}

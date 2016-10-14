@@ -1,6 +1,6 @@
 estimateAbundance <- function(KOAnno) {
     estimateSingleAnno <- function(Anno){
-      if (ncol(Anno) != 13) 
+      if (ncol(Anno) != 13)
           stop("annotation file from MG-RAST is invalid")
       if (grepl("query", Anno[1, 1])) {
           colnames(Anno) <- data.frame(lapply(Anno[1, ], as.character), stringsAsFactors = FALSE)
@@ -14,10 +14,10 @@ estimateAbundance <- function(KOAnno) {
           stop("the last row should be the tag of data")
       }
       seq.ko <- Anno[, c(1, 13)]
-      if (length(grep("^K", seq.ko[, 2])) != nrow(seq.ko)) 
+      if (length(grepl("^K", seq.ko[, 2])) != nrow(seq.ko))
           stop("all reads should be annotated with KO")
       ko.aggreg <- aggregate(seq.ko[, 2], list(seq.ko[, 1]), paste)
-      ko <- sapply(sapply(sapply(ko.aggreg[, 2], function(x) strsplit(x, ";")), unlist), 
+      ko <- sapply(sapply(sapply(ko.aggreg[, 2], function(x) strsplit(x, ";")), unlist),
           unique)
       ko.aggreg[, 3] <- listLen(ko)
       ko.score <- data.frame(unlist(ko), rep(1/listLen(ko), listLen(ko)), stringsAsFactors = F)
@@ -57,4 +57,4 @@ estimateAbundance <- function(KOAnno) {
     biom.data <- make_biom(extend.abund, observation_metadata = rownames(extend.abund))
     biom.data$type <- "enzymatic genes abundance"
     return(biom.data)
-} 
+}
