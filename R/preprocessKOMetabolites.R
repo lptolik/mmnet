@@ -16,7 +16,7 @@ preprocessKOMetabolites <- function(ko.info) {
     ko.info <- rbind(ko.info, multi.ko.info)
     message("Processing of reversible reaction  ...", domain = NA)
     reverse.index <- which(ko.info$type == "reversible")
-    ko.info$substrate.name[reverse.index] <- paste(ko.info$substrate.name[reverse.index], 
+    ko.info$substrate.name[reverse.index] <- paste(ko.info$substrate.name[reverse.index],
         ko.info$product.name[reverse.index], sep = ",")
     ko.info$product.name[reverse.index] <- ko.info$substrate.name[reverse.index]
     message("Merging the substrates and products of the same enzyme  ...", domain = NA)
@@ -25,9 +25,9 @@ preprocessKOMetabolites <- function(ko.info) {
     dup.select <- match(dup, ko.info$name)
     dup.no <- sapply(dup, function(x) which(ko.info$name == x))
     dup.no <- sapply(dup.no, function(x) x[-1])
-    ko.info[dup.select, 3] <- mapply(function(x, y) paste(c(ko.info[3][x, ], ko.info[3][y, 
+    ko.info[dup.select, 3] <- mapply(function(x, y) paste(c(ko.info[3][x, ], ko.info[3][y,
         ]), collapse = ","), dup.select, dup.no)
-    ko.info[dup.select, 4] <- mapply(function(x, y) paste(c(ko.info[4][x, ], ko.info[4][y, 
+    ko.info[dup.select, 4] <- mapply(function(x, y) paste(c(ko.info[4][x, ], ko.info[4][y,
         ]), collapse = ","), dup.select, dup.no)
     ko.info <- ko.info[-delete.no, ]
     message("Deleting the same metabolites for each enzyme  ...", domain = NA)
@@ -39,6 +39,6 @@ preprocessKOMetabolites <- function(ko.info) {
     ko.info$product.name <- sapply(ko.info[, 4], dlt.dup.metabolites)
     names(ko.info) <- c("ko", "type", "substrate", "product")
     delete.ko.no <- which(lapply(ko.info$ko, nchar) != 6)
-    if (delete.ko.no) 
+    if (length(delete.ko.no)>0)
         return(ko.info[-delete.ko.no, -2]) else return(ko.info[, -2])
-} 
+}
