@@ -2,32 +2,43 @@ estimateAbundance <- function(KOAnno) {
     estimateSingleAnno <- function(Anno){
       if (ncol(Anno) != 13)
           stop("annotation file from MG-RAST is invalid")
-      if (grepl("query", Anno[1, 1])) {
-          colnames(Anno) <- data.frame(lapply(Anno[1, ], as.character), stringsAsFactors = FALSE)
-          Anno <- tail(Anno, -1)
-      } else {
-          stop("the first row should be the description of data")
-      }
-      if (grep("Download\\s+complete", Anno[nrow(Anno), 1])) {
-          Anno <- head(Anno, -1)
-      } else {
-          stop("the last row should be the tag of data")
-      }
+      # that part is already checked in getMgrast
+      # if (grepl("query", Anno[1, 1])) {
+      #     colnames(Anno) <- data.frame(lapply(Anno[1, ], as.character), stringsAsFactors = FALSE)
+      #     Anno <- tail(Anno, -1)
+      # } else {
+      #     stop("the first row should be the description of data")
+      # }
+      # that part is already checked in getMgrast
+      # if (grep("Download\\s+complete", Anno[nrow(Anno), 1])) {
+      #     Anno <- head(Anno, -1)
+      # } else {
+      #     stop("the last row should be the tag of data")
+      # }
       seq.ko <- Anno[, c(1, 13)]
-      if (length(grepl("^K", seq.ko[, 2])) != nrow(seq.ko))
-          stop("all reads should be annotated with KO")
-      ko.aggreg <- aggregate(seq.ko[, 2], list(seq.ko[, 1]), paste)
-      ko <- sapply(sapply(sapply(ko.aggreg[, 2], function(x) strsplit(x, ";")), unlist),
+      if (length(which(grepl("^K", seq.ko[, 2]))) != nrow(seq.ko)){
+        seq.ko[,2]<-sapply(seq.ko[,2],function(.x)
+          paste(
+            gsub('accession=\\[K([0-9]+)\\].*',
+                 'K\\1',
+                 unlist(str_split(.x,';'))),
+            collapse = ';'))
+      }#stop("all reads should be annotated with KO")
+      #ko.aggreg <- aggregate(seq.ko[, 2], list(seq.ko[, 1]), paste)
+      seq.ko.dt<-setDT(seq.ko)
+      ko.aggreg.dt <- seq.ko.dt[,.(id = list(V13)),by=.(V1)]
+      l.dt<-ko.aggreg.dt[, .(id)]
+      ko.dt <- sapply(sapply(lapply(l.dt, function(x) str_split(x, ";")), unlist),
           unique)
-      ko.aggreg[, 3] <- listLen(ko)
-      ko.score <- data.frame(unlist(ko), rep(1/listLen(ko), listLen(ko)), stringsAsFactors = F)
-      ko.count <- aggregate(ko.score[, 2], list(ko.score[, 1]), sum)
-      ko.score[, 2] <- 1
-      ko.reads <- aggregate(ko.score[, 2], list(ko.score[, 1]), sum)
-      ko.abundance <- data.frame(cbind(ko.count, ko.reads[, 2]))
-      names(ko.abundance) <- c("ko", "abundance", "reads")
+      ko.aggreg.dt$len <- listLen(ko.dt)
+      ko.score.dt <- data.frame(unlist(ko.dt), rep(1/listLen(ko.dt), listLen(ko.dt)), stringsAsFactors = F)
+      ko.count.dt <- aggregate(ko.score.dt[, 2], list(ko.score.dt[, 1]), sum)
+      ko.score.dt[, 2] <- 1
+      ko.reads.dt <- aggregate(ko.score.dt[, 2], list(ko.score.dt[, 1]), sum)
+      ko.abundance.dt <- data.frame(cbind(ko.count.dt, ko.reads.dt[, 2]))
+      names(ko.abundance.dt) <- c("ko", "abundance", "reads")
       reads <- NULL
-      df <- subset(ko.abundance, reads > 2)
+      df <- subset(ko.abundance.dt, reads > 2)
       ret <- df[, 2]
       names(ret) <- df[, 1]
       return(ret)
