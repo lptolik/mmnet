@@ -15,6 +15,7 @@ estimateAbundance <- function(KOAnno) {
       # } else {
       #     stop("the last row should be the tag of data")
       # }
+      names(Anno)<-paste0('V',1:13)
       seq.ko <- Anno[, c(1, 13)]
       if (length(which(grepl("^K", seq.ko[, 2]))) != nrow(seq.ko)){
         seq.ko[,2]<-sapply(seq.ko[,2],function(.x)
@@ -28,8 +29,12 @@ estimateAbundance <- function(KOAnno) {
       seq.ko.dt<-setDT(seq.ko)
       ko.aggreg.dt <- seq.ko.dt[,.(id = list(V13)),by=.(V1)]
       l.dt<-ko.aggreg.dt[, .(id)]
-      ko.dt <- sapply(sapply(lapply(l.dt, function(x) str_split(x, ";")), unlist),
-          unique)
+      ko.dt <- sapply(
+        sapply(
+          lapply(l.dt$id,
+               function(x) str_split(x, ";")),
+          unlist),
+        unique)
       ko.aggreg.dt$len <- listLen(ko.dt)
       ko.score.dt <- data.frame(unlist(ko.dt), rep(1/listLen(ko.dt), listLen(ko.dt)), stringsAsFactors = F)
       ko.count.dt <- aggregate(ko.score.dt[, 2], list(ko.score.dt[, 1]), sum)

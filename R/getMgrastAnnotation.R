@@ -1,7 +1,27 @@
 getMgrastAnnotation <- function(MetagenomeID, evalue = 5, identity = 60, length = 15,
                                 resource = c(source = "KO", type = "ontology"), login.info = NULL,webkey=NULL)
 {
-    if (!is.null(login.info)&!is.null(webkey))
+  checkAnno <- function(Anno){
+    if (length(str_split(ncol(Anno),'\t')) != 13)
+      stop("annotation file from MG-RAST is invalid")
+    if (grepl("query", Anno[1])) {
+      cn<-data.frame(lapply(str_split(Anno[1],'\t'), as.character), stringsAsFactors = FALSE)
+      Anno <- tail(Anno, -1)
+    } else {
+      stop("the first row should be the description of data")
+    }
+    if (grep("Download\\s+complete", Anno[length(Anno)])) {
+      Anno <- head(Anno, -1)
+    } else {
+      stop("the last row should be the tag of data")
+    }
+    tmpf<-tempfile()
+    writeLines(Anno,con = tmpf)
+    df<-as.data.frame(fread(tmpf,sep='\t',header = FALSE,skip = 1L))
+    colnames(df)<-cn
+    return(df)
+  }
+  if (!is.null(login.info)&!is.null(webkey))
       public <- FALSE
     else
       public <- TRUE
@@ -49,7 +69,7 @@ getMgrastAnnotation <- function(MetagenomeID, evalue = 5, identity = 60, length 
         stop("invalid ontology source")
       if (length(which(grepl("insufficient\\s+permissions", anno))))
         stop("invalid webkey")
-      anno <- read.delim(textConnection(anno), header = FALSE, sep = "\t", stringsAsFactor = F)
+      anno<-checkAnno(anno)
       return(anno)
       cat("\n",MetagenomeID, "annotation data loading completed")
     }else{
