@@ -1,11 +1,10 @@
 Package: mmnet
 Type: Package
 Title: A metagenomic pipeline for systems biology
-Version: 1.11.2-1
+Version: 1.15.0-1
 Date: 2017-5-15
 Author: Yang Cao, Fei Li
-Maintainer: Yang Cao <yiluheihei@gmail.com>, Fei Li
- <pittacus@gmail.com>
+Maintainer: Anatoly Sorokin <lptolik@gmail.com>
 Description: This package gives the implementations microbiome metabolic
     network constructing and analyzing. It introduces a unique metagenomic
     systems biology approach, mapping metagenomic data to the KEGG global
