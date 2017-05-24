@@ -24,3 +24,5 @@ importFrom(XML, htmlParse, xmlDoc, xpathApply, getNodeSet, toString.XMLNode, xml
   xmlAttrs, xmlChildren, xmlValue, xmlTreeParse)
 importFrom(flexmix, KLdiv)
 importFrom(tools, file_path_sans_ext)
+importFrom("stats", "aggregate", "na.omit", "quantile", "wilcox.test")
+importFrom("utils", "data", "flush.console", "packageVersion","read.delim")
