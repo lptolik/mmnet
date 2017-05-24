@@ -40,5 +40,7 @@ preprocessKOMetabolites <- function(ko.info) {
     names(ko.info) <- c("ko", "type", "substrate", "product")
     delete.ko.no <- which(lapply(ko.info$ko, nchar) != 6)
     if (length(delete.ko.no)>0)
-        return(ko.info[-delete.ko.no, -2]) else return(ko.info[, -2])
+      return(ko.info[-delete.ko.no, -2])
+    else
+      return(ko.info[, -2])
 }
