@@ -9,5 +9,7 @@ updateKEGGPathway <- function(path = Sys.getenv("HOME")) {
     names(pathway.info) <- ko.pathway
     RefDbcache <- as.list(preprocessKOMetabolites(pathway.info))
     RefDbcache$pathway<-pathway.info
+    ko.df<-data.frame(ko=gsub('^path:','',names(ko.list)),name=ko.list)
+    RefDbcache$path.names<-ko.df
     saveMetabolicData(RefDbcache, path)
 }
