@@ -12,7 +12,7 @@ Description: This package gives the implementations microbiome metabolic
     system-level network and the next topological analysis will be of great
     help to analysis the various functional properties, including regulation
     and metabolic functionality of the metagenome.
-Depends: R (>= 2.14), igraph, biom
+Depends: R (>= 2.14), igraph, biomformat
 Imports: Biobase, RJSONIO, stringr, reshape2, ggplot2, KEGGREST, plyr,
         XML, RCurl, flexmix, Matrix, methods, tools, data.table
 Suggests: RCytoscape, graph, knitr

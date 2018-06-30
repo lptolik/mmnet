@@ -1,7 +1,7 @@
 import(igraph)
 import(Matrix)
 import(methods)
-import(biom)
+import(biomformat)
 import(data.table)
 #import(stringr)
 
