@@ -1,3 +1,11 @@
+#' Title
+#'
+#' @param KOAnno
+#'
+#' @return
+#' @export
+#'
+#' @examples
 estimateAbundance <- function(KOAnno) {
     estimateSingleAnno <- function(Anno){
       if (ncol(Anno) != 13)

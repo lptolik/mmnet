@@ -1,3 +1,11 @@
+#' Title
+#'
+#' @param koPathway
+#'
+#' @return
+#' @export
+#'
+#' @examples
 getKOPathwayInfo <- function(koPathway) {
     pathway.kgml <- keggGet(koPathway, "kgml")
     pathway.kgml <- xmlRoot(xmlTreeParse(pathway.kgml))
@@ -10,15 +18,15 @@ getKOPathwayInfo <- function(koPathway) {
         relation <- attr[names(attr) == "relation"]
         metabolites <- lapply(pathway.kgml[names(pathway.kgml) == "reaction"], xmlChildren)
         metabolites <- lapply(metabolites, function(x) lapply(x, xmlAttrs, "name"))
-        reaction.info <- lapply(lapply(lapply(metabolites, unlist), function(x) tapply(x, 
-            names(x), c)), function(x) return(cbind(paste(x[["substrate.name"]], 
+        reaction.info <- lapply(lapply(lapply(metabolites, unlist), function(x) tapply(x,
+            names(x), c)), function(x) return(cbind(paste(x[["substrate.name"]],
             collapse = ","), paste(x[["product.name"]], collapse = ","))))
         reaction.info <- do.call(rbind, reaction.info)
         reaction <- cbind(reaction, reaction.info)
         colnames(reaction) <- c("id", "rn", "type", "substrate.name", "product.name")
         entry <- entry[is.element(entry[, 1], reaction[, 1]), ]
         colnames(entry) <- c("id", "name", "rn")
-        reaction <- apply(reaction, 2, function(x) x[match(entry[, 1], reaction[, 
+        reaction <- apply(reaction, 2, function(x) x[match(entry[, 1], reaction[,
             1])])
         ko.info <- as.data.frame(cbind(entry, reaction), row.names = F, stringsAsFactors = FALSE)
         message(paste(koPathway, "processing is complete"))
@@ -35,7 +43,7 @@ getKOPathwayInfo <- function(koPathway) {
         deleteGlobal.info <- regexpr("ko01|ko00", names(ko.list), perl = TRUE)
         ko.list <- ko.list[deleteGlobal.info > 0]
         ko.info <- regexpr("ko\\d+", names(ko.list), perl = TRUE)
-        ko.pathway <- substring(names(ko.list), ko.info, ko.info + attr(ko.info, 
+        ko.pathway <- substring(names(ko.list), ko.info, ko.info + attr(ko.info,
             "match.length") - 1)
     }
-} 
+}

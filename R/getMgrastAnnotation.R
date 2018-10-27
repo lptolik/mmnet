@@ -1,3 +1,17 @@
+#' Title
+#'
+#' @param MetagenomeID
+#' @param evalue
+#' @param identity
+#' @param length
+#' @param resource
+#' @param login.info
+#' @param webkey
+#'
+#' @return
+#' @export
+#'
+#' @examples
 getMgrastAnnotation <- function(MetagenomeID, evalue = 5, identity = 60, length = 15,
                                 resource = c(source = "KO", type = "ontology"), login.info = NULL,webkey=NULL)
 {

@@ -21,6 +21,22 @@
 
 <<include=FALSE>>=
 library(knitr)
+opts_chunk$set(
+concordance=TRUE
+)
+@
+
+
+<<include=FALSE>>=
+library(knitr)
+opts_chunk$set(
+concordance=TRUE
+)
+@
+
+
+<<include=FALSE>>=
+library(knitr)
 options(width=64,digits=2)
 opts_chunk$set(size="small")
 opts_chunk$set(tidy=TRUE,tidy.opts=list(width.cutoff=50,keep.blank.line=TRUE))
@@ -55,7 +71,7 @@ The main features of \emph{mmnet}:
 
 \subsection{Installation}
 
-\emph{mmnet} requires these packages: \emph{KEGGREST}, \emph{igraph}, \emph{Biobase}, \emph{XML}, \emph{RCurl}, \emph{RJSONIO}, \emph{stringr}, \emph{ggplot2} and \emph{biom}. These should be installed automatically when you install \emph{mmnet} with biocLite() as follows:
+\emph{mmnet} requires these packages: \emph{KEGGREST}, \emph{igraph}, \emph{Biobase}, \emph{XML}, \emph{RCurl}, \emph{RJSONIO}, \emph{stringr}, \emph{ggplot2} and \emph{biomformat}. These should be installed automatically when you install \emph{mmnet} with biocLite() as follows:
 
 %For more functionally, users should install the latest devel version \emph{mmnet}. Install the latest release of R, then get the latest version of Bioconductor by starting R and entering the commands:
 

@@ -22,3 +22,4 @@ LazyLoad: yes
 biocViews: GraphsAndNetwork, Sequencing, Pathways, Microbiome,
         SystemsBiology
 Packaged: 2014-10-14 04:02:04 UTC; biocbuild
+RoxygenNote: 6.1.0

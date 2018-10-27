@@ -3,15 +3,15 @@
 #' Build and return an instance of the biom-class.
 #'
 #' This is for instantiating a biom object within R (\code{\link{biom-class}}),
-#' and assumes relevant data is already available in R. 
+#' and assumes relevant data is already available in R.
 #' This is different than reading a biom file into R.
 #' If you are instead interested in importing a biom file into R,
-#' you should use the \code{\link{read_biom}} function. 
-#' This function is made available (exported) so that 
+#' you should use the \code{\link{read_biom}} function.
+#' This function is made available (exported) so that
 #' advanced-users/developers
 #' can easily represent analogous data in this structure if needed.
 #' However, most users are expected to instead rely on the
-#' \code{\link{read_biom}} function for data import, followed by 
+#' \code{\link{read_biom}} function for data import, followed by
 #' accessor functions that extract R-friendly
 #' subsets of the data stored in the biom-format derived list.
 #'
@@ -21,26 +21,26 @@
 #'
 #' @usage biom(x)
 #'
-#' @param x (REQUIRED). A named list conforming to conventions arising from 
-#'  the \code{\link{fromJSON}} function reading a biom-format file with 
+#' @param x (REQUIRED). A named list conforming to conventions arising from
+#'  the \code{\link{fromJSON}} function reading a biom-format file with
 #'  default settings. See \code{\link{read_biom}} for more details about
-#'  data import and 
+#'  data import and
 #'  \code{\link{biom-class}} for more details about accessor functions
 #'  that extract R-friendly
 #'  subsets of the data and metadata stored in \code{x}.
 #'
-#' @return An instance of the \code{\link{biom-class}}. 
+#' @return An instance of the \code{\link{biom-class}}.
 #'
-#' @seealso 
-#' 
+#' @seealso
+#'
 #' Function to create a biom object from R data,
 #' \code{\link{make_biom}}.
-#' 
+#'
 #' Definition of the
-#' \code{\link{biom-class}}. 
-#' 
+#' \code{\link{biom-class}}.
+#'
 #' The \code{\link{read_biom}} import function.
-#' 
+#'
 #' Function to write a biom format file from a biom object,
 #' \code{\link{write_biom}}
 #'
@@ -77,8 +77,8 @@ setMethod("biom", c("list"), function(x){
 #'
 #' This function creates a valid instance of the \code{\link{biom-class}}
 #' from standard base-R objects like
-#' \code{\link{matrix-class}} or \code{\link{data.frame}}. 
-#' This makes it possible to export any contingency table data 
+#' \code{\link{matrix-class}} or \code{\link{data.frame}}.
+#' This makes it possible to export any contingency table data
 #' represented in R to
 #' \href{http://biom-format.org/documentation/biom_format.html}{the biom-format},
 #' regardless of its source.
@@ -87,49 +87,49 @@ setMethod("biom", c("list"), function(x){
 #' The sparse biom-format is not (yet) supported.
 #'
 #' The BIOM file format (canonically pronounced biome) is designed to be
-#' a general-use format for representing biological sample by observation 
-#' contingency tables. BIOM is a recognized standard for the 
-#' \href{http://www.earthmicrobiome.org/}{Earth Microbiome Project} 
-#' and is a \href{http://gensc.org/}{Genomics Standards Consortium} 
-#' candidate project. Please see 
+#' a general-use format for representing biological sample by observation
+#' contingency tables. BIOM is a recognized standard for the
+#' \href{http://www.earthmicrobiome.org/}{Earth Microbiome Project}
+#' and is a \href{http://gensc.org/}{Genomics Standards Consortium}
+#' candidate project. Please see
 #' \href{http://biom-format.org/}{the biom-format home page}
 #' for more details.
 #'
-#' @param data (Required). 
+#' @param data (Required).
 #'  \code{\link{matrix-class}} or \code{\link{data.frame}}.
 #'  A contingency table.
 #'  Observations / features / OTUs / species are rows,
 #'  samples / sites / libraries are columns.
-#'  
-#' @param sample_metadata (Optional). 
+#'
+#' @param sample_metadata (Optional).
 #'  A \code{\link{matrix-class}} or \code{\link{data.frame}}
 #'  with the number of rows equal to the number of samples in \code{data}.
 #'  Sample covariates associated with the count data.
 #'  This should look like the table returned by
 #'  \code{\link{sample_metadata}} on a valid instance
 #'  of the \code{\link{biom-class}}.
-#'  
-#' @param observation_metadata (Optional). 
+#'
+#' @param observation_metadata (Optional).
 #'  A \code{\link{matrix-class}} or \code{\link{data.frame}}
-#'  with the number of rows equal to the number of 
+#'  with the number of rows equal to the number of
 #'  features / species / OTUs / genes in \code{data}.
 #'  This should look like the table returned by
 #'  \code{\link{observation_metadata}} on a valid instance
 #'  of the \code{\link{biom-class}}.
-#' 
+#'
 #' @param id (Optional). Character string. Identifier for the project.
-#' 
+#'
 #' @return An object of \code{\link{biom-class}}.
 #'
 #' @references \url{http://biom-format.org/}
-#' 
+#'
 #' @seealso
-#' 
-#' \code{\link{write_biom}} 
-#' 
-#' \code{\link{biom-class}} 
-#' 
-#' \code{\link{read_biom}} 
+#'
+#' \code{\link{write_biom}}
+#'
+#' \code{\link{biom-class}}
+#'
+#' \code{\link{read_biom}}
 #'
 #' @importFrom plyr alply
 #'
@@ -174,7 +174,7 @@ make_biom <- function(data, sample_metadata=NULL, observation_metadata=NULL, id=
   # The samples / sites / columns "meta" data table
   if(!is.null(sample_metadata)){
     columns = mapply(list, SIMPLIFY=FALSE, id=as.list(colnames(data)),
-                     metadata=alply(as.matrix(sample_metadata), 1, .expand=FALSE, .dims=TRUE)) 
+                     metadata=alply(as.matrix(sample_metadata), 1, .expand=FALSE, .dims=TRUE))
   } else {
     columns = mapply(list, id=as.list(colnames(data)), metadata=NA, SIMPLIFY=FALSE)
   }
@@ -188,7 +188,7 @@ make_biom <- function(data, sample_metadata=NULL, observation_metadata=NULL, id=
                    format = "Biological Observation Matrix 1.0.0-dev",
                    format_url = format_url,
                    type = "OTU table",
-                   generated_by = sprintf("biom %s", packageVersion("biom")),
+                   generated_by = sprintf("biom %s", packageVersion("biomformat")),
                    date = as.character(Sys.time()),
                    matrix_type = "dense",
                    matrix_element_type = "int",
@@ -202,10 +202,10 @@ make_biom <- function(data, sample_metadata=NULL, observation_metadata=NULL, id=
 #' Method extensions to show for biom objects.
 #'
 #' See the general documentation of \code{\link[methods]{show}} method for
-#' expected behavior. 
+#' expected behavior.
 #'
 #' @seealso \code{\link[methods]{show}}
-#' 
+#'
 #' @export
 #' @aliases show,biom-method
 #' @docType methods
@@ -222,7 +222,7 @@ setMethod("show", "biom", function(object){
 	cat(biom_shape(object)[1], "rows and", biom_shape(object)[2], "columns \n")
 })
 ################################################################################
-#' Extract the header from a \code{\link{biom-class}} object as a list. 
+#' Extract the header from a \code{\link{biom-class}} object as a list.
 #'
 #' @usage header(x)
 #'
@@ -231,7 +231,7 @@ setMethod("show", "biom", function(object){
 #' @return A list containing the header data.
 #'  That is, all the required elements that are not
 #'  the main data or index metadata.
-#'  
+#'
 #' @aliases header
 #' @docType methods
 #' @rdname header-methods
@@ -246,7 +246,7 @@ setGeneric("header", function(x) standardGeneric("header"))
 setMethod("header", c("biom"), function(x){
 	biomheadkeys = c("id", "format", "format_url", "type", "generated_by", "date",
 									 "matrix_type", "matrix_element_type", "shape")
-	return(x[biomheadkeys])	
+	return(x[biomheadkeys])
 })
 ################################################################################
 #' The matrix dimensions
@@ -255,13 +255,13 @@ setMethod("header", c("biom"), function(x){
 #' @usage biom_shape(x)
 #' @param x (Required). An instance of the \code{\link{biom-class}}.
 #' @return A length two \code{\link{integer-class}} vector
-#'  indicating the \code{\link{nrow}} and \code{\link{ncol}} 
+#'  indicating the \code{\link{nrow}} and \code{\link{ncol}}
 #'  of the main data matrix stored in \code{x}.
 #'
-#' @seealso 
-#' 
+#' @seealso
+#'
 #' \code{\link{biom-class}}
-#' 
+#'
 #' @export
 #' @docType methods
 #' @rdname biom_shape-methods
@@ -282,14 +282,14 @@ setMethod("biom_shape", c("biom"), function(x){
 #'
 #' @usage matrix_element_type(x)
 #' @param x (Required). An instance of the \code{\link{biom-class}}.
-#' @return A \code{\link{character-class}} string indicating 
-#' the class of the data stored in the main observation matrix of \code{x}, 
+#' @return A \code{\link{character-class}} string indicating
+#' the class of the data stored in the main observation matrix of \code{x},
 #' with expected values \code{"int"}, \code{"float"}, \code{"unicode"}.
 #'
-#' @seealso 
-#' 
+#' @seealso
+#'
 #' \code{\link{biom-class}}
-#' 
+#'
 #' @export
 #' @docType methods
 #' @rdname matrix_element_type-methods
@@ -309,21 +309,21 @@ setMethod("matrix_element_type", c("biom"), function(x){
 #' for \code{\link{biom-class}} objects.
 #'
 #' See the general documentation of \code{\link[base]{nrow}} method for
-#' expected behavior. 
+#' expected behavior.
 #'
 #' @usage nrow(x)
 #' @param x (Required). An instance of the \code{\link{biom-class}}.
 #' @return The number of rows in \code{x}.
 #'  A length 1 \code{\link{integer-class}}.
 #'
-#' @seealso 
-#' 
+#' @seealso
+#'
 #' \code{\link{ncol}}
-#' 
+#'
 #' \code{\link[base]{nrow}}
-#' 
+#'
 #' \code{\link{biom_shape}}
-#' 
+#'
 #' @export
 #' @aliases nrow,biom-method
 #' @docType methods
@@ -341,21 +341,21 @@ setMethod("nrow", c("biom"), function(x){
 #' for \code{\link{biom-class}} objects.
 #'
 #' See the general documentation of \code{\link[base]{ncol}} method for
-#' expected behavior. 
-#' 
+#' expected behavior.
+#'
 #' @usage ncol(x)
 #' @param x (Required). An instance of the \code{\link{biom-class}}.
 #' @return The number of columns in \code{x}.
 #'  A length 1 \code{\link{integer-class}}.
 #'
-#' @seealso 
-#' 
+#' @seealso
+#'
 #' \code{\link{nrow}}
-#' 
+#'
 #' \code{\link[base]{ncol}}
-#' 
+#'
 #' \code{\link{biom_shape}}
-#' 
+#'
 #' @export
 #' @aliases ncol,biom-method
 #' @docType methods
@@ -373,20 +373,20 @@ setMethod("ncol", c("biom"), function(x){
 #' for \code{\link{biom-class}} objects.
 #'
 #' See the general documentation of \code{\link[base]{rownames}} method for
-#' expected behavior. 
-#' 
+#' expected behavior.
+#'
 #' @param x (Required). An instance of the \code{\link{biom-class}}.
 #' @return The number of columns in \code{x}.
 #'  A length 1 \code{\link{integer-class}}.
 #'
-#' @seealso 
-#' 
+#' @seealso
+#'
 #' \code{\link{nrow}}
-#' 
+#'
 #' \code{\link[base]{rownames}}
-#' 
+#'
 #' \code{\link{biom_shape}}
-#' 
+#'
 #' @export
 #' @aliases rownames,biom-method
 #' @docType methods
@@ -404,20 +404,20 @@ setMethod("rownames", c("biom"), function(x){
 #' for \code{\link{biom-class}} objects.
 #'
 #' See the general documentation of \code{\link[base]{colnames}} method for
-#' expected behavior. 
-#' 
+#' expected behavior.
+#'
 #' @param x (Required). An instance of the \code{\link{biom-class}}.
 #' @return The number of columns in \code{x}.
 #'  A length 1 \code{\link{integer-class}}.
 #'
-#' @seealso 
-#' 
+#' @seealso
+#'
 #' \code{\link{nrow}}
-#' 
+#'
 #' \code{\link[base]{colnames}}
-#' 
+#'
 #' \code{\link{biom_shape}}
-#' 
+#'
 #' @export
 #' @aliases colnames,biom-method
 #' @docType methods
@@ -431,8 +431,8 @@ setMethod("colnames", c("biom"), function(x){
 	sapply(x$columns, function(i) i$id)
 })
 ################################################################################
-#' Access main data observation matrix data from \code{\link{biom-class}}. 
-#' 
+#' Access main data observation matrix data from \code{\link{biom-class}}.
+#'
 #' Retrieve and organize main data from \code{\link{biom-class}},
 #' represented as a matrix with index names.
 #'
@@ -443,32 +443,32 @@ setMethod("colnames", c("biom"), function(x){
 #'  returned object. For large datasets, specifying the row subset here,
 #'  rather than after creating the whole matrix first,
 #'  can improve speed/efficiency.
-#'  Can be vector of index numbers (\code{\link{numeric-class}}) or 
+#'  Can be vector of index numbers (\code{\link{numeric-class}}) or
 #'  index names (\code{\link{character-class}}).
 #' @param columns (Optional). The subset of column indices described in the
 #'  returned object. For large datasets, specifying the column subset here,
 #'  rather than after creating the whole matrix first,
 #'  can improve speed/efficiency.
-#'  Can be vector of index numbers (\code{\link{numeric-class}}) or 
+#'  Can be vector of index numbers (\code{\link{numeric-class}}) or
 #'  index names (\code{\link{character-class}}).
 #' @param parallel (Optional). Logical. Whether to perform the accession parsing
 #'  using a parallel-computing backend supported by the \code{\link{plyr-package}}
 #'  via the \code{\link[foreach]{foreach-package}}. Note: At the moment, the header
 #'  accessor does not need nor does it support parallel-computed parsing.
-#'  
+#'
 #'  @return A matrix containing the main observation data, with index names.
-#'   The type of data (numeric or character) 
+#'   The type of data (numeric or character)
 #'   will depend on the results of \code{\link{matrix_element_type}(x)}.
 #'   The class of the matrix returned will depend on the sparsity of the data,
 #'   and whether it has numeric or character data.
 #'   For now, only numeric data can be stored in a \code{\link{Matrix-class}},
 #'   which will be stored sparsely, if possible.
 #'   Character data will be returned as a vanilla \code{\link{matrix-class}}.
-#'  
+#'
 #' @aliases biom_data
 #' @rdname biom_data-methods
 #' @export
-#' @examples 
+#' @examples
 #' min_dense_file   = system.file("extdata", "min_dense_otu_table.biom", package = "biom")
 #' min_sparse_file  = system.file("extdata", "min_sparse_otu_table.biom", package = "biom")
 #' rich_dense_file  = system.file("extdata", "rich_dense_otu_table.biom", package = "biom")
@@ -538,22 +538,22 @@ setMethod("biom_data", c("biom", "numeric", "numeric"), function(x, rows, column
   }
   if( identical(length(columns), 0) ){
     stop("argument `columns` must have non-zero length.")
-  }    
+  }
   # Begin matrix section
   if( identical(x$matrix_type, "dense") ){
     # Begin dense section
     # If matrix is stored as dense, create "vanilla" R matrix, m
-    m = laply(x$data[rows], function(i) i[columns], .parallel=parallel) 
+    m = laply(x$data[rows], function(i) i[columns], .parallel=parallel)
     if( length(rows) > 1L &
     		length(columns) > 1L &
     		matrix_element_type(x) %in% c("int", "float")
     	){
       # If either dimension is length-one, don't call coerce to "Matrix"
       # Note that laply() does still work in this case.
-      # If both dimension lengths > 1 & data is numeric, 
+      # If both dimension lengths > 1 & data is numeric,
       # attempt to coerce to Matrix-inherited class,
       # Mainly because it might still be sparse and this is a good way
-      # to handle it in R. 
+      # to handle it in R.
       m = Matrix(m)
     }
   } else {
@@ -576,7 +576,7 @@ setMethod("biom_data", c("biom", "numeric", "numeric"), function(x, rows, column
             })
     }
     colnames(adf) <- c("r", "c", "data")
-    # indices start at 0 in biom sparse format, 
+    # indices start at 0 in biom sparse format,
     # and are first two columns
     adf[, 1:2] <- adf[, 1:2] + 1
     # Subset to just indices that are in both arguments `rows` and `columns`
@@ -588,7 +588,7 @@ setMethod("biom_data", c("biom", "numeric", "numeric"), function(x, rows, column
     # Subset this biggest-size m to just `rows` and `columns`
     m = m[rows, columns]
   # End sparse section
-  }   
+  }
   # Add row and column names
   if( identical(length(rows), 1L) | identical(length(columns), 1L) ){
     # If either dimension is length-one
@@ -607,10 +607,10 @@ setMethod("biom_data", c("biom", "numeric", "numeric"), function(x, rows, column
   return(m)
 })
 ################################################################################
-#' Access meta data from \code{\link{biom-class}}. 
-#' 
+#' Access meta data from \code{\link{biom-class}}.
+#'
 #' Retrieve and organize meta data from \code{\link{biom-class}},
-#' represented as a \code{\link{data.frame}} (if possible, or a list) 
+#' represented as a \code{\link{data.frame}} (if possible, or a list)
 #' with proper index names.
 #'
 #' @usage sample_metadata(x, columns, parallel=FALSE)
@@ -620,21 +620,21 @@ setMethod("biom_data", c("biom", "numeric", "numeric"), function(x, rows, column
 #'  returned object. For large datasets, specifying the column subset here,
 #'  rather than after creating the whole matrix first,
 #'  can improve speed/efficiency.
-#'  Can be vector of index numbers (\code{\link{numeric-class}}) or 
+#'  Can be vector of index numbers (\code{\link{numeric-class}}) or
 #'  index names (\code{\link{character-class}}).
 #' @param parallel (Optional). Logical. Whether to perform the accession parsing
 #'  using a parallel-computing backend supported by the \code{\link{plyr-package}}
-#'  via the \code{\link[foreach]{foreach-package}}. 
-#'  
-#' @return A \code{\link{data.frame}} or \code{\link{list}} containing 
+#'  via the \code{\link[foreach]{foreach-package}}.
+#'
+#' @return A \code{\link{data.frame}} or \code{\link{list}} containing
 #'  the meta data, with index names. The precise form of the object returned
 #'  depends on the metadata stored in \code{x}. A \code{data.frame} is
 #'  created if possible.
-#'  
+#'
 #' @aliases sample_metadata
 #' @rdname sample_metadata-methods
 #' @export
-#' @examples 
+#' @examples
 #' min_dense_file   = system.file("extdata", "min_dense_otu_table.biom", package = "biom")
 #' min_sparse_file  = system.file("extdata", "min_sparse_otu_table.biom", package = "biom")
 #' rich_dense_file  = system.file("extdata", "rich_dense_otu_table.biom", package = "biom")
@@ -689,8 +689,8 @@ setMethod("sample_metadata", c("biom", "numeric"), function(x, columns, parallel
 	return(extract_metadata(x, "columns", columns, parallel))
 })
 ################################################################################
-#' Access observation (row) meta data from \code{\link{biom-class}}. 
-#' 
+#' Access observation (row) meta data from \code{\link{biom-class}}.
+#'
 #' Retrieve and organize meta data from \code{\link{biom-class}},
 #' represented as a \code{\link{data.frame}} (if possible)
 #' or a list, with proper index names.
@@ -702,21 +702,21 @@ setMethod("sample_metadata", c("biom", "numeric"), function(x, columns, parallel
 #'  returned object. For large datasets, specifying the row subset here,
 #'  -- rather than first creating the complete data object --
 #'  can improve speed/efficiency.
-#'  This parameter can be vector of index numbers (\code{\link{numeric-class}}) or 
+#'  This parameter can be vector of index numbers (\code{\link{numeric-class}}) or
 #'  index names (\code{\link{character-class}}).
 #' @param parallel (Optional). Logical. Whether to perform the accession parsing
 #'  using a parallel-computing backend supported by the \code{\link{plyr-package}}
-#'  via the \code{\link[foreach]{foreach-package}}. 
-#'  
-#' @return A \code{\link{data.frame}} or \code{\link{list}} containing 
+#'  via the \code{\link[foreach]{foreach-package}}.
+#'
+#' @return A \code{\link{data.frame}} or \code{\link{list}} containing
 #'  the meta data, with index names. The precise form of the object returned
 #'  depends on the metadata stored in \code{x}. A \code{data.frame} is
 #'  created if possible.
-#'  
+#'
 #' @aliases observation_metadata
 #' @rdname observation_metadata-methods
 #' @export
-#' @examples 
+#' @examples
 #' min_dense_file   = system.file("extdata", "min_dense_otu_table.biom", package = "biom")
 #' min_sparse_file  = system.file("extdata", "min_sparse_otu_table.biom", package = "biom")
 #' rich_dense_file  = system.file("extdata", "rich_dense_otu_table.biom", package = "biom")
